@@ -23,6 +23,15 @@ function incrementStat(key) {
   localStorage.setItem(STATS_KEY, JSON.stringify(stats));
 }
 
+function decrementStat(key) {
+  const stats = getStats();
+  const today = new Date().toISOString().split("T")[0];
+  stats[today] = stats[today] || { listened: 0, learned: 0 };
+  if (key === "listened" && stats[today].listened > 0) stats[today].listened--;
+  if (key === "learned" && stats[today].learned > 0) stats[today].learned--;
+  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+}
+
 function getTodayStats() {
   const stats = getStats();
   const today = new Date().toISOString().split("T")[0];
@@ -451,16 +460,16 @@ function onListClick(e) {
     const btn = e.target.closest(".learned-btn");
     const isNowLearned = !getLearned().includes(dua.id);
     toggleLearned(dua.id);
-    // Nur inkrementieren wenn GERADE selektiert (nicht deselektiert)
+    // Inkrementieren wenn selektiert, dekrementieren wenn deselektiert
     if (isNowLearned) {
       incrementStat("learned");
+      showToast("✨ Mashallah, mach weiter so! ✨");
+    } else {
+      decrementStat("learned");
     }
     updateButtonUI(btn, isNowLearned, "is-active");
     renderLearnedProgress();
     renderStatistics();
-    if (isNowLearned) {
-      showToast("✨ Mashallah, mach weiter so! ✨");
-    }
   } else if (e.target.closest('[data-action="copy"]')) {
     copyDuaToClipboard(dua);
   } else if (e.target.closest('[data-action="share"]')) {
