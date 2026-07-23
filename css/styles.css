@@ -106,6 +106,12 @@ a {
   height: auto;
 }
 
+@media (max-width: 640px) {
+  .brand-logo {
+    max-width: 200px;
+  }
+}
+
 .site-tagline {
   margin-top: var(--space-1);
   color: var(--color-text-muted);
@@ -658,6 +664,10 @@ body.dark-mode .hero {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
+  .brand-logo {
+    max-width: 200px;
+  }
+
   .hero-title {
     font-size: 1.5rem;
   }
@@ -690,6 +700,15 @@ body.dark-mode .hero {
   }
 
   .filter-bar-inner {
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 8px;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+
+  .filter-pill {
+    flex-basis: calc(50% - 4px);
+    text-align: center;
   }
 }
