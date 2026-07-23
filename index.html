@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NurDua – Bittgebete aus dem Koran</title>
+  <meta name="description" content="NurDua sammelt Bittgebete (Dua) direkt aus dem Koran – mit Übersetzung, Rezitation zum Anhören und persönlicher Favoritenliste." />
+  <meta name="theme-color" content="#204838" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="assets/logo-full.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/logo-full.png" alt="NurDua.de – Bittgebete aus dem Qur'an" />
+        </a>
+        <button class="theme-toggle" id="theme-toggle" title="Dark Mode umschalten" aria-label="Dark Mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">
+        "Ruft Mich an, so erhöre Ich euch"
+        <br />
+        <small>(40:60)</small>
+      </h1>
+      <p class="hero-subtitle">Bittgebete (Dua) direkt aus dem Koran – zum Anhören, Lernen und Teilen.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number" id="total-duas">0</span>
+          <span class="stat-label">Duas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="today-listened">0</span>
+          <span class="stat-label">Heute gehört</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="today-learned">0</span>
+          <span class="stat-label">Heute gelernt</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="filter-bar" aria-label="Kategorien">
+    <div class="filter-bar-container">
+      <div class="filter-bar-inner" id="filter-bar"></div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="dua-count-row">
+      <div>
+        <p class="dua-count" id="dua-count"></p>
+        <p class="learned-progress" id="learned-progress"></p>
+      </div>
+      <div class="action-buttons">
+        <button class="play-all-btn" type="button" id="play-all-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span>Alle Bittgebete anhören</span>
+        </button>
+        <button class="action-btn export-btn" type="button" id="export-pdf-btn" title="Favorite Duas als PDF exportieren">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Exportieren</span>
+        </button>
+      </div>
+    </div>
+    <div class="dua-list" id="dua-list"></div>
+    <p class="empty-state" id="empty-state" hidden>Hier ist noch nichts.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>„Und euer Herr sagt: Ruft Mich an, so erhöre Ich euch." (Koran 40:60)</p>
+      <p>
+        <a href="mailto:m.yesilmen@outlook.de">Feedback per E-Mail senden</a>
+        <span class="footer-sep">·</span>
+        <a href="impressum.html">Impressum</a>
+        <span class="footer-sep">·</span>
+        <a href="datenschutz.html">Datenschutz</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/duas-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
