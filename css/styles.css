@@ -694,14 +694,20 @@ body.dark-mode .hero {
   }
 
   .dua-actions {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .dua-actions > .icon-btn {
+    flex-basis: calc(50% - var(--space-1) / 2);
   }
 
   .dua-actions-right {
     width: 100%;
     margin-left: 0;
     justify-content: flex-end;
+    gap: var(--space-1);
   }
 
   .action-buttons {
