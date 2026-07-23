@@ -160,10 +160,14 @@ function renderStatistics() {
   const duasEl = document.getElementById("total-duas");
   const listenedEl = document.getElementById("today-listened");
   const learnedEl = document.getElementById("today-learned");
+  const listenedLabelEl = document.getElementById("today-listened-label");
+  const learnedLabelEl = document.getElementById("today-learned-label");
 
   if (duasEl) duasEl.textContent = DUAS.length;
   if (listenedEl) listenedEl.textContent = today.listened || 0;
   if (learnedEl) learnedEl.textContent = today.learned || 0;
+  if (listenedLabelEl) listenedLabelEl.textContent = "Bereits gehört";
+  if (learnedLabelEl) learnedLabelEl.textContent = "Auswendig gelernt";
 }
 
 function renderDuas() {
@@ -222,6 +226,7 @@ function renderDuas() {
   }).join("");
 
   syncButtonsUI();
+  updateExportButton();
 }
 
 const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Anhören</span>`;
@@ -435,6 +440,11 @@ function onListClick(e) {
     toggleFavorite(dua.id);
     const isFav = getFavorites().includes(dua.id);
     updateButtonUI(btn, isFav, "is-active");
+    // Wenn auf "Favoriten"-Seite: neu rendern um Dua zu entfernen
+    if (currentCategory() === "favoriten") {
+      renderDuas();
+    }
+    renderStatistics();
   } else if (e.target.closest('[data-action="learned"]')) {
     const btn = e.target.closest(".learned-btn");
     const isNowLearned = !getLearned().includes(dua.id);
@@ -486,56 +496,147 @@ function preloadAudio() {
   });
 }
 
-// Export zu PDF
-function exportFavoritesAsPDF() {
-  const favorites = getFavorites();
-  if (favorites.length === 0) {
-    alert("Keine favorisierten Duas vorhanden.");
+// Export Funktion mit jsPDF
+async function exportDuasAsPDF(duas, filename) {
+  if (duas.length === 0) {
+    alert("Keine Duas zum Exportieren vorhanden.");
     return;
   }
 
+  showToast("📄 PDF wird generiert...", 1000);
+
+  // Erstelle HTML für PDF
+  const container = document.createElement("div");
+  container.style.cssText = "width: 800px; padding: 40px; font-family: Arial, sans-serif; background: white;";
+  container.innerHTML = `
+    <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #b0913f; margin-bottom: 30px;">
+      <p style="color: #b0913f; font-size: 14px; font-weight: bold; margin: 0;">www.nurdua.de</p>
+    </div>
+    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 10px 0;">NurDua – Bittgebete aus dem Koran</h1>
+    <p style="text-align: center; color: #999; font-size: 12px; margin-bottom: 30px;">Exportiert am ${new Date().toLocaleDateString("de-DE")}</p>
+    ${duas.map((dua) => `
+      <div style="margin: 25px 0; padding: 15px; border-left: 4px solid #b0913f;">
+        <div style="font-size: 16px; direction: rtl; font-weight: bold; margin-bottom: 10px; font-family: 'Amiri', serif;">${dua.arabic}</div>
+        <div style="font-style: italic; color: #8a7130; font-size: 12px; margin-bottom: 8px;">${dua.translit}</div>
+        <div style="font-size: 13px; color: #333; margin-bottom: 8px;">${dua.translation}</div>
+        <div style="font-size: 11px; color: #999;"><strong>Quelle:</strong> ${sourceLabel(dua)}</div>
+      </div>
+    `).join("")}
+  `;
+
+  document.body.appendChild(container);
+
+  try {
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: "#ffffff"
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const imgWidth = 210; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: imgHeight > imgWidth ? "p" : "p",
+      unit: "mm",
+      format: "a4"
+    });
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= 297; // A4 height in mm
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= 297;
+    }
+
+    pdf.save(filename.replace(".html", ".pdf"));
+    showToast("✨ PDF erfolgreich exportiert!");
+  } catch (error) {
+    console.error("PDF-Fehler:", error);
+    alert("PDF-Generierung fehlgeschlagen. Bitte versuche es später.");
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
+// Favoriten exportieren
+function exportFavoritesAsPDF() {
+  const favorites = getFavorites();
+  console.log("DEBUG: Favoriten IDs:", favorites);
+  console.log("DEBUG: Total DUAS:", DUAS.length);
+
   const favDuas = DUAS.filter((d) => favorites.includes(d.id));
-  let html = `<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>Meine Favorite Duas – NurDua</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
-    h1 { color: #204838; text-align: center; }
-    .dua { margin: 30px 0; padding: 15px; border-left: 4px solid #b0913f; }
-    .arabic { font-size: 18px; direction: rtl; font-weight: bold; margin-bottom: 10px; }
-    .translation { font-size: 14px; color: #555; margin-bottom: 8px; }
-    .source { font-size: 12px; color: #999; }
-  </style>
-</head>
-<body>
-  <h1>Meine Favorite Duas – NurDua</h1>
-  <p style="text-align:center;color:#666;">Exportiert am ${new Date().toLocaleDateString("de-DE")}</p>`;
+  console.log("DEBUG: Gefilterte Favoriten Duas:", favDuas.length);
 
-  favDuas.forEach((dua) => {
-    html += `
-    <div class="dua">
-      <div class="arabic">${dua.arabic}</div>
-      <div class="translation"><strong>Übersetzung:</strong> ${dua.translation}</div>
-      <div class="source"><strong>Quelle:</strong> ${sourceLabel(dua)}</div>
-    </div>`;
-  });
+  if (favDuas.length === 0) {
+    alert("Noch keine favorisierten Duas. Tippe auf das Herz bei einer Dua um sie hinzuzufügen.");
+    return;
+  }
 
-  html += `</body></html>`;
+  const filename = `nurdua-meine-duas-${new Date().toISOString().split("T")[0]}.pdf`;
+  showToast(`📄 Exportiere ${favDuas.length} Favoriten...`);
+  exportDuasAsPDF(favDuas, filename);
+}
 
-  const blob = new Blob([html], { type: "text/html" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `nurdua-meine-duas-${new Date().toISOString().split("T")[0]}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
+// Kategorie exportieren
+function exportCategoryAsPDF() {
+  const category = currentCategory();
+  const categoryDuas = getFilteredDuas();
+  const categoryLabel = CATEGORIES.find(c => c.id === category)?.label || "Duas";
+  const filename = `nurdua-${category}-${new Date().toISOString().split("T")[0]}.pdf`;
+  exportDuasAsPDF(categoryDuas, filename);
+}
+
+// Alle Duas exportieren
+function exportAllAsPDF() {
+  console.log("DEBUG exportAllAsPDF: Exportiere ALLE 51 Duas");
+  const filename = `nurdua-alle-duas-${new Date().toISOString().split("T")[0]}.pdf`;
+  showToast(`📄 Exportiere ${DUAS.length} Duas...`);
+  exportDuasAsPDF(DUAS, filename);
+}
+
+// Export Button Label & Handler
+function updateExportButton() {
+  const category = currentCategory();
+  const exportBtn = document.getElementById("export-btn");
+  const exportLabel = document.getElementById("export-btn-label");
+
+  console.log("DEBUG updateExportButton: category =", category);
+
+  if (!exportBtn) return;
+
+  // Entferne alten Click-Handler
+  exportBtn.onclick = null;
+
+  // Setze neuen Handler basierend auf Kategorie
+  if (category === "favoriten") {
+    exportLabel.textContent = "Meine Duas exportieren";
+    exportBtn.title = "Favorisierte Duas exportieren";
+    exportBtn.onclick = exportFavoritesAsPDF;
+  } else if (category === "alle") {
+    exportLabel.textContent = "Exportieren";
+    exportBtn.title = "Alle Duas exportieren";
+    exportBtn.onclick = exportAllAsPDF;
+  } else {
+    exportLabel.textContent = "Exportieren";
+    exportBtn.title = `${CATEGORIES.find(c => c.id === category)?.label || "Kategorie"} exportieren`;
+    exportBtn.onclick = exportCategoryAsPDF;
+  }
 }
 
 window.addEventListener("hashchange", () => {
   renderFilterBar();
   renderDuas();
+  updateExportButton();
 });
 
 // Dark Mode Handler
@@ -560,13 +661,14 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFilterBar();
   renderDuas();
   renderStatistics();
+  updateExportButton();
   initDarkMode();
 
   document.getElementById("dua-list").addEventListener("click", onListClick);
   document.getElementById("play-all-btn")?.addEventListener("click", onPlayAllClick);
 
-  // Export Button Handler
-  document.getElementById("export-pdf-btn")?.addEventListener("click", exportFavoritesAsPDF);
+  // Export Button wird dynamisch in updateExportButton() zugewiesen
+  // (onclick wird dort je nach Kategorie gesetzt)
 
   // PWA Service Worker registrieren
   if ("serviceWorker" in navigator) {

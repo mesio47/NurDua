@@ -672,6 +672,19 @@ body.dark-mode .hero {
     font-size: 1.5rem;
   }
 
+  .stat {
+    min-width: 80px;
+    padding: var(--space-1);
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
   .dua-arabic {
     font-size: 1.6rem;
     line-height: 2.2;

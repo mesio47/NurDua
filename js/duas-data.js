@@ -141,7 +141,7 @@ const DUAS = [
   {
     id: "q21-87",
     sura: 21, ayahs: [87],
-    category: "heilung",
+    category: "kraft",
     audioStart: 13.28,
     arabic: `لَّا إِلَـٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ`,
     translit: `La ilaha illa anta subhanaka inni kuntu mina az-zalimin.`,
@@ -151,7 +151,7 @@ const DUAS = [
   {
     id: "q21-83",
     sura: 21, ayahs: [83],
-    category: "heilung",
+    category: "kraft",
     audioStart: 5.07,
     arabic: `أَنِّي مَسَّنِيَ الضُّرُّ وَأَنتَ أَرْحَمُ الرَّاحِمِينَ`,
     translit: `Anni massaniya ad-durru wa anta arhamu ar-rahimin.`,
@@ -503,7 +503,6 @@ const DUAS = [
 const CATEGORIES = [
   { id: "alle", label: "Alle" },
   { id: "vergebung", label: "Vergebung" },
-  { id: "heilung", label: "Heilung" },
   { id: "kraft", label: "Kraft" },
   { id: "schutz", label: "Schutz & Segen" },
   { id: "favoriten", label: "Meine Duas", suffix: "♥" },
