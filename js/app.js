@@ -451,7 +451,10 @@ function onListClick(e) {
     const btn = e.target.closest(".learned-btn");
     const isNowLearned = !getLearned().includes(dua.id);
     toggleLearned(dua.id);
-    incrementStat("learned");
+    // Nur inkrementieren wenn GERADE selektiert (nicht deselektiert)
+    if (isNowLearned) {
+      incrementStat("learned");
+    }
     updateButtonUI(btn, isNowLearned, "is-active");
     renderLearnedProgress();
     renderStatistics();
