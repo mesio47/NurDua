@@ -336,6 +336,8 @@ function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
     }
   };
 
+  // Entferne alte Event-Listener bevor neue hinzugefügt werden
+  audio.removeEventListener("ended", playNext);
   audio.addEventListener("ended", playNext);
   playNext();
 }
