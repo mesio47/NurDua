@@ -726,8 +726,9 @@ body.dark-mode .hero {
   .filter-pill {
     flex-basis: calc(50% - 4px);
     text-align: center;
-    padding: var(--space-2) var(--space-1);
-    font-size: 0.95rem;
+    padding: var(--space-1) 6px;
+    font-size: 0.8rem;
+    line-height: 1.2;
   }
 
   /* Dua Cards - Touch-friendly on Mobile */
