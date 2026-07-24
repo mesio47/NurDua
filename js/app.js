@@ -459,12 +459,13 @@ function shareDua(dua) {
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      padding: 24px;
+      padding: 20px;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
       z-index: 9999;
-      max-width: 90%;
-      width: 320px;
+      width: min(90vw, 320px);
+      max-height: 90vh;
+      overflow-y: auto;
       animation: slideUpDialog 0.3s ease-out;
     `;
     dialog.innerHTML = `
