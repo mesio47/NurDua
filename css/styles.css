@@ -856,3 +856,72 @@ body.dark-mode .hero {
     margin: 0 var(--space-1);
   }
 }
+
+/* Disable Hover Effects on Touch Devices */
+@media (hover: none) {
+  .theme-toggle:hover,
+  .back-link:hover,
+  .filter-pill:hover,
+  .action-btn:hover,
+  .play-all-btn:hover,
+  .dua-card:hover,
+  .play-btn:hover,
+  .loop-btn:hover,
+  .copy-btn:hover,
+  .share-btn:hover,
+  .learned-btn:hover,
+  .heart-btn:hover,
+  .scroll-to-top:hover,
+  .site-footer a:hover {
+    background-color: inherit;
+    color: inherit;
+    opacity: 1;
+    box-shadow: none;
+  }
+}
+
+/* Hover States Only on Non-Touch Devices */
+/* Prevents :hover from "sticking" on touch devices */
+@media (hover: hover) {
+  .theme-toggle:hover {
+    opacity: 0.8;
+  }
+
+  .back-link:hover {
+    color: var(--color-gold);
+  }
+
+  .filter-pill:hover {
+    background-color: var(--color-gold);
+    color: white;
+  }
+
+  .action-btn:hover {
+    opacity: 0.85;
+  }
+
+  .play-all-btn:hover {
+    opacity: 0.85;
+  }
+
+  .dua-card:hover {
+    box-shadow: 0 8px 24px rgba(32, 72, 56, 0.15);
+  }
+
+  .play-btn:hover,
+  .loop-btn:hover,
+  .copy-btn:hover,
+  .share-btn:hover,
+  .learned-btn:hover,
+  .heart-btn:hover {
+    opacity: 0.85;
+  }
+
+  .scroll-to-top:hover {
+    opacity: 0.85;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-gold);
+  }
+}
