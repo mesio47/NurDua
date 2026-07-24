@@ -20,6 +20,24 @@ const DUAS = [
     translation: `Unser Herr, gib uns Gutes in diesem Leben und Gutes im Jenseits, und bewahre uns vor der Strafe des Feuers.`
   },
   {
+    id: "q17-24",
+    sura: 17, ayahs: [24],
+    category: "persoenlich",
+    audioStart: 5.33,
+    arabic: `رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا`,
+    translit: `Rabbi-rhamhuma kama rabbayani saghira.`,
+    translation: `Mein Herr, erbarme Dich meiner Eltern, wie sie mich klein großgezogen haben.`
+  },
+  {
+    id: "q25-74",
+    sura: 25, ayahs: [74],
+    category: "persoenlich",
+    audioStart: 2.71,
+    arabic: `رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا`,
+    translit: `Rabbana hab lana min azwajina wa dhurriyyatina qurrata a'yunin wa-j'alna lil-muttaqina imama.`,
+    translation: `Unser Herr, schenke uns von unseren Partnern und unseren Nachkommen Augentrost, und mache uns zu Vorbildern für die Gottesfürchtigen.`
+  },
+  {
     id: "q2-127-128",
     sura: 2, ayahs: [127, 128],
     category: "persoenlich",
@@ -270,7 +288,7 @@ const DUAS = [
     id: "q2-250",
     sura: 2, ayahs: [250],
     category: "kraft",
-    audioStart: 6.00,
+    audioStart: 7.00,
     arabic: `رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ`,
     translit: `Rabbana afrigh 'alayna sabran wa thabbit aqdamana wa-nsurna 'ala al-qawmi al-kafirin.`,
     translation: `Unser Herr, gieße Geduld über uns aus, festige unsere Schritte und hilf uns gegen das ungläubige Volk.`
@@ -406,15 +424,6 @@ const DUAS = [
     translation: `Unser Herr, wende die Strafe der Hölle von uns ab. Ihre Strafe ist wahrlich bedrückend.`
   },
   {
-    id: "q25-74",
-    sura: 25, ayahs: [74],
-    category: "persoenlich",
-    audioStart: 2.71,
-    arabic: `رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا`,
-    translit: `Rabbana hab lana min azwajina wa dhurriyyatina qurrata a'yunin wa-j'alna lil-muttaqina imama.`,
-    translation: `Unser Herr, schenke uns von unseren Partnern und unseren Nachkommen Augentrost, und mache uns zu Vorbildern für die Gottesfürchtigen.`
-  },
-  {
     id: "q40-7-9",
     sura: 40, ayahs: [7, 8],
     category: "vergebung",
@@ -450,15 +459,6 @@ const DUAS = [
     arabic: `رَبَّنَا أَتْمِمْ لَنَا نُورَنَا وَاغْفِرْ لَنَا ۖ إِنَّكَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ`,
     translit: `Rabbana atmim lana nurana wa-ghfir lana, innaka 'ala kulli shay'in qadir.`,
     translation: `Unser Herr, vervollständige unser Licht für uns und vergib uns, Du hast Macht zu allen Dingen.`
-  },
-  {
-    id: "q17-24",
-    sura: 17, ayahs: [24],
-    category: "persoenlich",
-    audioStart: 5.33,
-    arabic: `رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا`,
-    translit: `Rabbi-rhamhuma kama rabbayani saghira.`,
-    translation: `Mein Herr, erbarme Dich meiner Eltern, wie sie mich klein großgezogen haben.`
   },
   {
     id: "q17-80",
