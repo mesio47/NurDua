@@ -1,6 +1,4 @@
 {
-  "buildCommand": "echo 'Static site, no build needed'",
-  "devCommand": "python3 -m http.server 5177",
   "headers": [
     {
       "source": "/(.*)\\.html$",
