@@ -1,12 +1,7 @@
 {
-  "build": {
-    "env": {}
-  },
-  "buildCommand": "true",
-  "outputDirectory": ".",
-  "installCommand": "true",
   "framework": null,
-  "public": true,
+  "buildCommand": "",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)\\.html$",
