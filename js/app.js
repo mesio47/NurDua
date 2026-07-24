@@ -595,12 +595,27 @@ function preloadNextAudio(duaId) {
   }
 }
 
+// Check if PDF libraries are available
+function checkPDFLibraries() {
+  if (typeof html2canvas === "undefined") {
+    showToast("❌ PDF-Funktion nicht verfügbar (Offline?)");
+    return false;
+  }
+  if (typeof jspdf === "undefined" || !window.jspdf?.jsPDF) {
+    showToast("❌ PDF-Funktion nicht verfügbar (Offline?)");
+    return false;
+  }
+  return true;
+}
+
 // Export Funktion mit jsPDF
 async function exportDuasAsPDF(duas, filename) {
   if (duas.length === 0) {
-    alert("Keine Duas zum Exportieren vorhanden.");
+    showToast("❌ Keine Duas zum Exportieren vorhanden.");
     return;
   }
+
+  if (!checkPDFLibraries()) return;
 
   showToast("📄 PDF wird generiert...", 1000);
 
@@ -767,6 +782,36 @@ function initScrollToTop() {
   });
 }
 
+// Keyboard Navigation (Arrow Keys + Space)
+function initKeyboardNav() {
+  document.addEventListener("keydown", (e) => {
+    // Ignore if user is typing in an input
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+    const duas = getFilteredDuas();
+    if (duas.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const playBtn = document.querySelector(".play-btn");
+      if (playBtn) playBtn.closest(".dua-card")?.nextElementSibling?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const playBtn = document.querySelector(".play-btn");
+      if (playBtn) playBtn.closest(".dua-card")?.previousElementSibling?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else if (e.key === " ") {
+      e.preventDefault();
+      // Space: Play/Stop the currently playing dua or play the first one
+      if (currentPlayback) {
+        stopPlayback();
+      } else {
+        const firstPlayBtn = document.querySelector(".play-btn");
+        if (firstPlayBtn) firstPlayBtn.click();
+      }
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderFilterBar();
   renderDuas();
@@ -774,6 +819,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateExportButton();
   initDarkMode();
   initScrollToTop();
+  initKeyboardNav();
 
   document.getElementById("dua-list").addEventListener("click", onListClick);
   document.getElementById("play-all-btn")?.addEventListener("click", onPlayAllClick);
