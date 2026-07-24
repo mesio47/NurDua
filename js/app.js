@@ -323,6 +323,7 @@ function renderDuas() {
 
   syncButtonsUI();
   updateExportButton();
+  updatePlayAllButton();
 }
 
 const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Anhören</span>`;
@@ -832,6 +833,35 @@ function exportAllAsPDF() {
   exportDuasAsPDF(DUAS, filename);
 }
 
+// Update Play-All Button Label Dynamically
+function updatePlayAllButton() {
+  const category = currentCategory();
+  const playAllBtn = document.getElementById("play-all-btn");
+  const playAllLabel = document.getElementById("play-all-btn-label");
+
+  if (!playAllBtn || !playAllLabel) return;
+
+  const categoryDuas = getFilteredDuas();
+  const count = categoryDuas.length;
+
+  // Different labels for different categories
+  if (category === "favoriten") {
+    playAllLabel.textContent = `Meine Duas abspielen (${count})`;
+    playAllBtn.title = "Alle favorisierten Duas abspielen";
+  } else if (category === "gelernt") {
+    playAllLabel.textContent = `Gelernte Duas abspielen (${count})`;
+    playAllBtn.title = "Alle auswendig gelernten Duas abspielen";
+  } else if (category === "alle") {
+    playAllLabel.textContent = `Alle ${count} Bittgebete abspielen`;
+    playAllBtn.title = "Alle Bittgebete abspielen";
+  } else {
+    // Get category label from CATEGORIES array
+    const categoryLabel = CATEGORIES.find(c => c.id === category)?.label || "Duas";
+    playAllLabel.textContent = `Alle ${categoryLabel}-Duas abspielen (${count})`;
+    playAllBtn.title = `Alle ${categoryLabel}-Duas abspielen`;
+  }
+}
+
 // Export Button Label & Handler
 function updateExportButton() {
   const category = currentCategory();
@@ -863,6 +893,7 @@ window.addEventListener("hashchange", () => {
   renderFilterBar();
   renderDuas();
   updateExportButton();
+  updatePlayAllButton();
 });
 
 // Dark Mode Handler
@@ -955,6 +986,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDuas();
   renderStatistics();
   updateExportButton();
+  updatePlayAllButton();
   initDarkMode();
   initScrollToTop();
   initKeyboardNav();
