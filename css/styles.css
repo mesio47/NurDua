@@ -766,6 +766,13 @@ body.dark-mode .hero {
   .play-all-btn {
     width: 100%;
     justify-content: center;
+    font-size: 0.9rem;
+    gap: 4px;
+  }
+
+  .play-all-btn span {
+    line-height: 1.2;
+    word-break: break-word;
   }
 
   .filter-bar-inner {
