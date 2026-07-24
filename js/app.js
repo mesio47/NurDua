@@ -44,7 +44,15 @@ function incrementStat(key) {
   stats[today] = stats[today] || { listened: 0, learned: 0 };
   if (key === "listened") stats[today].listened++;
   if (key === "learned") stats[today].learned++;
-  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  } catch (e) {
+    if (e.name === "QuotaExceededError") {
+      console.warn("localStorage quota exceeded – stats not saved");
+      showToast("⚠️ Speicher voll – Statistiken werden nicht gespeichert");
+    }
+  }
 }
 
 function decrementStat(key) {
@@ -53,7 +61,15 @@ function decrementStat(key) {
   stats[today] = stats[today] || { listened: 0, learned: 0 };
   if (key === "listened" && stats[today].listened > 0) stats[today].listened--;
   if (key === "learned" && stats[today].learned > 0) stats[today].learned--;
-  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  } catch (e) {
+    if (e.name === "QuotaExceededError") {
+      console.warn("localStorage quota exceeded – stats not saved");
+      showToast("⚠️ Speicher voll – Änderungen können nicht gespeichert werden");
+    }
+  }
 }
 
 function getTodayStats() {
@@ -96,6 +112,44 @@ function showToast(message, duration = 2000) {
   }, duration);
 }
 
+// Persistent toast (for long operations like PDF export)
+function showPersistentToast(message) {
+  const existingToast = document.getElementById("toast-persistent");
+  if (existingToast) {
+    existingToast.remove();
+  }
+
+  const toast = document.createElement("div");
+  toast.id = "toast-persistent";
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #204838 0%, #336b54 100%);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(32, 72, 56, 0.3);
+    animation: slideUpToast 0.3s ease-out;
+    z-index: 9999;
+  `;
+
+  document.body.appendChild(toast);
+  return toast;
+}
+
+// Remove persistent toast with animation
+function removePersistentToast(toast) {
+  if (toast) {
+    toast.style.animation = "slideDownToast 0.3s ease-out";
+    setTimeout(() => toast.remove(), 300);
+  }
+}
+
 function getStoredIds(key) {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -112,7 +166,16 @@ function toggleStoredId(key, id) {
   } else {
     ids.splice(idx, 1);
   }
-  localStorage.setItem(key, JSON.stringify(ids));
+
+  try {
+    localStorage.setItem(key, JSON.stringify(ids));
+  } catch (e) {
+    if (e.name === "QuotaExceededError") {
+      console.warn("localStorage quota exceeded – changes not saved");
+      showToast("⚠️ Speicher voll – Änderungen können nicht gespeichert werden");
+    }
+  }
+
   return ids;
 }
 
@@ -665,7 +728,11 @@ async function exportDuasAsPDF(duas, filename) {
 
   if (!checkPDFLibraries()) return;
 
-  showToast("📄 PDF wird generiert...", 1000);
+  // Show persistent toast + disable export button during generation
+  const persistentToast = showPersistentToast("📄 PDF wird generiert...");
+  const exportBtn = document.getElementById("export-btn");
+  const wasDisabled = exportBtn?.disabled;
+  if (exportBtn) exportBtn.disabled = true;
 
   // Erstelle HTML für PDF
   const container = document.createElement("div");
@@ -721,12 +788,16 @@ async function exportDuasAsPDF(duas, filename) {
     }
 
     pdf.save(filename.replace(".html", ".pdf"));
+    removePersistentToast(persistentToast);
     showToast("✨ PDF erfolgreich exportiert!");
   } catch (error) {
     console.error("PDF-Fehler:", error);
+    removePersistentToast(persistentToast);
     showToast("❌ PDF-Generierung fehlgeschlagen");
   } finally {
     document.body.removeChild(container);
+    // Re-enable export button
+    if (exportBtn) exportBtn.disabled = wasDisabled;
   }
 }
 
@@ -807,23 +878,35 @@ function initDarkMode() {
   toggle?.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     const newMode = document.body.classList.contains("dark-mode");
-    localStorage.setItem("nurdua:darkmode", newMode);
+    try {
+      localStorage.setItem("nurdua:darkmode", newMode);
+    } catch (e) {
+      console.warn("Could not save dark mode preference");
+    }
     toggle.textContent = newMode ? "☀️" : "🌙";
   });
 }
 
-// Scroll-to-Top Button
+// Scroll-to-Top Button with Throttled Event
 function initScrollToTop() {
   const scrollBtn = document.getElementById("scroll-to-top-btn");
   if (!scrollBtn) return;
 
+  let scrollTimeout;
+  let lastScrollState = false;
+
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-      scrollBtn.classList.add("visible");
-    } else {
-      scrollBtn.classList.remove("visible");
-    }
-  });
+    // Throttle scroll events to 100ms (not 100x/sec)
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const isVisible = window.scrollY > 300;
+      // Only update DOM if state changed (reduces unnecessary reflows)
+      if (isVisible !== lastScrollState) {
+        scrollBtn.classList.toggle("visible", isVisible);
+        lastScrollState = isVisible;
+      }
+    }, 100);
+  }, { passive: true }); // passive flag improves scroll performance
 
   scrollBtn.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
