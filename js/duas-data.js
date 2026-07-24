@@ -41,11 +41,11 @@ const DUAS = [
   },
   {
     id: "q26-83-87",
-    sura: 26, ayahs: [83, 84, 85, 86, 87],
+    sura: 26, ayahs: [83, 84],
     category: "kraft",
-    arabic: `رَبِّ هَبْ لِي حُكْمًا وَأَلْحِقْنِي بِالصَّالِحِينَ ۞ وَاجْعَل لِّي لِسَانَ صِدْقٍ فِي الْآخِرِينَ ۞ وَلَا تُخْزِنِي يَوْمَ يُبْعَثُونَ`,
-    translit: `Rabbi hab li hukman wa alhiqni bis-salihin. Wa-j'al li lisana sidqin fi al-akhirin. Wa la tukhzini yawma yub'athun.`,
-    translation: `Mein Herr, schenke mir Urteilskraft und füge mich den Rechtschaffenen bei. Und gib mir einen wahrhaftigen Ruf bei den späteren Generationen. Und lass mich nicht in Schande fallen an dem Tag, an dem sie auferweckt werden.`,
+    arabic: `رَبِّ هَبْ لِي حُكْمًا وَأَلْحِقْنِي بِالصَّالِحِينَ ۞ وَاجْعَل لِّي لِسَانَ صِدْقٍ فِي الْآخِرِينَ`,
+    translit: `Rabbi hab li hukman wa alhiqni bis-salihin. Wa-j'al li lisana sidqin fi al-akhirin.`,
+    translation: `Mein Herr, schenke mir Urteilskraft und füge mich den Rechtschaffenen bei. Und gib mir einen wahrhaftigen Ruf bei den späteren Generationen.`,
     note: `Ibrahim`
   },
   {
