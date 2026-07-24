@@ -489,6 +489,15 @@ const DUAS = [
     translation: `Führe uns den geraden Weg, den Weg derer, denen Du Gnade erwiesen hast, nicht den Weg derer, die Deinen Zorn erregt haben, und nicht den der Irregehenden.`,
     note: `Al-Fatiha, wird in jedem Pflichtgebet rezitiert`
   },
+  {
+    id: "q60-4-5",
+    sura: 60, ayahs: [4, 5],
+    category: "kraft",
+    arabic: `رَبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ الْمَصِيرُ ۞ رَبَّنَا لَا تَجْعَلْنَا فِتْنَةً لِّلَّذِينَ كَفَرُوا وَاغْفِرْ لَنَا رَبَّنَا`,
+    translit: `Rabbana 'alayka tawakkalna wa ilayka anabna wa ilayka al-masir. Rabbana la taj'alna fitnatan lilladhina kafaru wa-ghfir lana rabbana.`,
+    translation: `Unser Herr, auf Dich vertrauen wir, und Dir wenden wir uns reumütig zu, und zu Dir führt der Lebensweg. Unser Herr, mache uns nicht zu einer Versuchung für die Ungläubigen, und vergib uns, unser Herr.`,
+    note: `Surah Al-Mumtahanah`
+  },
 ];
 
 const CATEGORIES = [
