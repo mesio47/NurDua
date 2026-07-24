@@ -297,7 +297,12 @@ function syncButtonsUI() {
 
 function stopPlayback() {
   if (!currentPlayback) return;
-  const { mode, duaId, audio } = currentPlayback;
+  const { mode, duaId, audio, timeUpdateListener, endedListener } = currentPlayback;
+
+  // Clean up all event listeners to prevent memory leaks
+  if (endedListener) audio.removeEventListener("ended", endedListener);
+  if (timeUpdateListener) audio.removeEventListener("timeupdate", timeUpdateListener);
+
   audio.pause();
   audio.src = "";
 
@@ -355,6 +360,8 @@ function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
         audio.currentTime = dua.audioStart;
       }
       if (isLast && dua.audioEnd) {
+        // Store timeUpdateListener for cleanup
+        if (currentPlayback) currentPlayback.timeUpdateListener = onTimeUpdate;
         audio.addEventListener("timeupdate", onTimeUpdate);
       }
       audio.play().catch(() => {
@@ -369,6 +376,11 @@ function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
       start();
     }
   };
+
+  // Store listeners in currentPlayback for cleanup in stopPlayback()
+  if (currentPlayback) {
+    currentPlayback.endedListener = playNext;
+  }
 
   // Entferne alte Event-Listener bevor neue hinzugefügt werden
   audio.removeEventListener("ended", playNext);
@@ -549,17 +561,19 @@ function onListClick(e) {
   } else if (e.target.closest('[data-action="share"]')) {
     shareDua(dua);
   } else if (e.target.closest('[data-action="play"]')) {
-    incrementStat("listened");
     const wasPlayingThis = currentPlayback && currentPlayback.mode !== "loop" && currentPlayback.duaId === dua.id;
     stopPlayback();
     if (!wasPlayingThis) {
+      // Only increment stat when STARTING new playback, not when stopping
+      incrementStat("listened");
       startSinglePlayback(dua, e.target.closest(".play-btn"));
     }
   } else if (e.target.closest('[data-action="loop"]')) {
-    incrementStat("listened");
     const wasLoopingThis = currentPlayback && currentPlayback.mode === "loop" && currentPlayback.duaId === dua.id;
     stopPlayback();
     if (!wasLoopingThis) {
+      // Only increment stat when STARTING new playback, not when stopping
+      incrementStat("listened");
       startLoopPlayback(dua, e.target.closest(".loop-btn"));
     }
   }
