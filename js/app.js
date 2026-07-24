@@ -463,8 +463,11 @@ function shareDua(dua) {
       animation: fadeIn 0.2s ease-out;
     `;
 
-    // Dialog
+    // Dialog with A11y attributes
     const dialog = document.createElement("div");
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+    dialog.setAttribute("aria-labelledby", "share-dialog-title");
     dialog.style.cssText = `
       position: fixed;
       top: 50%;
@@ -481,22 +484,40 @@ function shareDua(dua) {
       animation: slideUpDialog 0.3s ease-out;
     `;
     dialog.innerHTML = `
-      <p style="margin: 0 0 16px; font-weight: 600; font-size: 16px;">Wie möchtest du teilen?</p>
-      <a href="${whatsappUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #25D366; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;">📱 WhatsApp</a>
-      <a href="${emailUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #0078D4; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;">📧 Email</a>
-      <button style="display: block; width: 100%; padding: 12px; margin: 10px 0; background: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Abbrechen</button>
+      <p id="share-dialog-title" style="margin: 0 0 16px; font-weight: 600; font-size: 16px;">Wie möchtest du teilen?</p>
+      <a href="${whatsappUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #25D366; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;" aria-label="Auf WhatsApp teilen">📱 WhatsApp</a>
+      <a href="${emailUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #0078D4; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;" aria-label="Per Email teilen">📧 Email</a>
+      <button style="display: block; width: 100%; padding: 12px; margin: 10px 0; background: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;" aria-label="Dialog schließen">Abbrechen</button>
     `;
 
-    // Close handler
+    // Close handler with focus restoration
     const closeDialog = () => {
       backdrop.remove();
       dialog.remove();
       document.removeEventListener("keydown", handleKeydown);
+      document.removeEventListener("keydown", handleTabTrap);
     };
 
     // ESC-key handler
     const handleKeydown = (e) => {
       if (e.key === "Escape") closeDialog();
+    };
+
+    // Focus trap (prevent Tab from leaving dialog)
+    const handleTabTrap = (e) => {
+      if (e.key !== "Tab") return;
+
+      const focusables = dialog.querySelectorAll("a, button");
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
 
     // Button click handler
@@ -508,9 +529,15 @@ function shareDua(dua) {
 
     // ESC-key listener
     document.addEventListener("keydown", handleKeydown);
+    // Tab focus trap listener
+    document.addEventListener("keydown", handleTabTrap);
 
     document.body.appendChild(backdrop);
     document.body.appendChild(dialog);
+
+    // Auto-focus first link for accessibility
+    const firstLink = dialog.querySelector("a");
+    if (firstLink) setTimeout(() => firstLink.focus(), 100);
   }
 }
 
@@ -597,7 +624,7 @@ function preloadNextAudio(duaId) {
   const nextDua = DUAS[currentIndex + 1];
   const url = audioUrlFor(nextDua.sura, nextDua.ayahs[0]);
 
-  // Create hidden audio element that stays in DOM for preload benefit
+  // Create or reuse hidden audio element for preload
   let preloadElement = document.getElementById(`preload-${nextDua.id}`);
   if (!preloadElement) {
     preloadElement = document.createElement("audio");
@@ -606,6 +633,13 @@ function preloadNextAudio(duaId) {
     preloadElement.style.display = "none";
     preloadElement.src = url;
     document.body.appendChild(preloadElement);
+
+    // Cleanup old preload elements (keep only last 3)
+    // This prevents DOM bloat & memory accumulation on long sessions
+    const allPreloads = document.querySelectorAll("audio[id^='preload-']");
+    if (allPreloads.length > 3) {
+      allPreloads[0].remove(); // Remove oldest preload element
+    }
   }
 }
 
@@ -798,6 +832,8 @@ function initScrollToTop() {
 
 // Keyboard Navigation (Arrow Keys + Space)
 function initKeyboardNav() {
+  let currentFocusIndex = -1; // Track currently focused card
+
   document.addEventListener("keydown", (e) => {
     // Ignore if user is typing in an input
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
@@ -805,22 +841,27 @@ function initKeyboardNav() {
     const duas = getFilteredDuas();
     if (duas.length === 0) return;
 
+    // Get all visible dua cards
+    const cards = Array.from(document.querySelectorAll(".dua-card"));
+    if (cards.length === 0) return;
+
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      const playBtn = document.querySelector(".play-btn");
-      if (playBtn) playBtn.closest(".dua-card")?.nextElementSibling?.scrollIntoView({ behavior: "smooth", block: "center" });
+      // Move focus to next card sequentially
+      currentFocusIndex = Math.min(currentFocusIndex + 1, cards.length - 1);
+      cards[currentFocusIndex]?.scrollIntoView({ behavior: "smooth", block: "center" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      const playBtn = document.querySelector(".play-btn");
-      if (playBtn) playBtn.closest(".dua-card")?.previousElementSibling?.scrollIntoView({ behavior: "smooth", block: "center" });
+      // Move focus to previous card sequentially
+      currentFocusIndex = Math.max(currentFocusIndex - 1, 0);
+      cards[currentFocusIndex]?.scrollIntoView({ behavior: "smooth", block: "center" });
     } else if (e.key === " ") {
       e.preventDefault();
-      // Space: Play/Stop the currently playing dua or play the first one
-      if (currentPlayback) {
-        stopPlayback();
-      } else {
-        const firstPlayBtn = document.querySelector(".play-btn");
-        if (firstPlayBtn) firstPlayBtn.click();
+      // Play/Stop the focused card's audio
+      const focusedCard = currentFocusIndex >= 0 ? cards[currentFocusIndex] : cards[0];
+      if (focusedCard) {
+        const playBtn = focusedCard.querySelector(".play-btn");
+        if (playBtn) playBtn.click();
       }
     }
   });
