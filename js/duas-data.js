@@ -11,6 +11,15 @@
 
 const DUAS = [
   {
+    id: "q2-201",
+    sura: 2, ayahs: [201],
+    category: "persoenlich",
+    audioStart: 3.3,
+    arabic: `رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ`,
+    translit: `Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar.`,
+    translation: `Unser Herr, gib uns Gutes in diesem Leben und Gutes im Jenseits, und bewahre uns vor der Strafe des Feuers.`
+  },
+  {
     id: "q2-127-128",
     sura: 2, ayahs: [127, 128],
     category: "persoenlich",
@@ -256,15 +265,6 @@ const DUAS = [
     translit: `Rabbana amanna fa-ktubna ma'a ash-shahidin.`,
     translation: `Unser Herr, wir glauben. Verzeichne uns unter den Zeugen.`,
     note: `Leute der Schrift, beim Hören des Korans`
-  },
-  {
-    id: "q2-201",
-    sura: 2, ayahs: [201],
-    category: "persoenlich",
-    audioStart: 3.3,
-    arabic: `رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ`,
-    translit: `Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar.`,
-    translation: `Unser Herr, gib uns Gutes in diesem Leben und Gutes im Jenseits, und bewahre uns vor der Strafe des Feuers.`
   },
   {
     id: "q2-250",
