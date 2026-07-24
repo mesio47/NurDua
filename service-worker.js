@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v10";
+const CACHE_NAME = "nurdua-v11";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
@@ -51,7 +51,10 @@ self.addEventListener("fetch", (event) => {
       }
 
       return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type === "basic") {
+        // Only cache successful responses with basic type (Same-Origin)
+        // response.type: "basic" = same-origin, "cors" = cross-origin+CORS
+        // "opaque"/"error" = cannot be cached
+        if (!response || response.status !== 200 || response.type !== "basic") {
           return response;
         }
 

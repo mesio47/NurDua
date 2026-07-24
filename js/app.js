@@ -395,9 +395,9 @@ function startQueuePlayback(duas, playAllBtn) {
 function copyDuaToClipboard(dua) {
   const text = `${dua.translation}\n\n${dua.translit}\n\nQuelle: ${sourceLabel(dua)}\n\n✨ Von NurDua – www.nurdua.de`;
   navigator.clipboard.writeText(text).then(() => {
-    alert("Dua kopiert! ✓");
+    showToast("✓ Dua kopiert!");
   }).catch(() => {
-    alert("Kopieren nicht möglich");
+    showToast("❌ Kopieren nicht möglich");
   });
 }
 
@@ -576,7 +576,7 @@ async function exportDuasAsPDF(duas, filename) {
     showToast("✨ PDF erfolgreich exportiert!");
   } catch (error) {
     console.error("PDF-Fehler:", error);
-    alert("PDF-Generierung fehlgeschlagen. Bitte versuche es später.");
+    showToast("❌ PDF-Generierung fehlgeschlagen");
   } finally {
     document.body.removeChild(container);
   }
@@ -585,14 +585,10 @@ async function exportDuasAsPDF(duas, filename) {
 // Favoriten exportieren
 function exportFavoritesAsPDF() {
   const favorites = getFavorites();
-  console.log("DEBUG: Favoriten IDs:", favorites);
-  console.log("DEBUG: Total DUAS:", DUAS.length);
-
   const favDuas = DUAS.filter((d) => favorites.includes(d.id));
-  console.log("DEBUG: Gefilterte Favoriten Duas:", favDuas.length);
 
   if (favDuas.length === 0) {
-    alert("Noch keine favorisierten Duas. Tippe auf das Herz bei einer Dua um sie hinzuzufügen.");
+    showToast("❌ Noch keine Favoriten. Tippe das Herz an!");
     return;
   }
 
@@ -612,7 +608,6 @@ function exportCategoryAsPDF() {
 
 // Alle Duas exportieren
 function exportAllAsPDF() {
-  console.log("DEBUG exportAllAsPDF: Exportiere ALLE 51 Duas");
   const filename = `nurdua-alle-duas-${new Date().toISOString().split("T")[0]}.pdf`;
   showToast(`📄 Exportiere ${DUAS.length} Duas...`);
   exportDuasAsPDF(DUAS, filename);
@@ -623,8 +618,6 @@ function updateExportButton() {
   const category = currentCategory();
   const exportBtn = document.getElementById("export-btn");
   const exportLabel = document.getElementById("export-btn-label");
-
-  console.log("DEBUG updateExportButton: category =", category);
 
   if (!exportBtn) return;
 
