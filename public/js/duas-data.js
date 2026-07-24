@@ -270,7 +270,7 @@ const DUAS = [
     id: "q2-250",
     sura: 2, ayahs: [250],
     category: "kraft",
-    audioStart: 5.43,
+    audioStart: 6.00,
     arabic: `رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ`,
     translit: `Rabbana afrigh 'alayna sabran wa thabbit aqdamana wa-nsurna 'ala al-qawmi al-kafirin.`,
     translation: `Unser Herr, gieße Geduld über uns aus, festige unsere Schritte und hilf uns gegen das ungläubige Volk.`
