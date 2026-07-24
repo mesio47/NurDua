@@ -160,6 +160,13 @@ function getStoredIds(key) {
 
 function toggleStoredId(key, id) {
   const ids = getStoredIds(key);
+
+  // SECURITY FIX: Max 1000 Einträge pro Key (DoS-Prävention)
+  if (ids.length >= 1000) {
+    showToast("❌ Zu viele Einträge – bitte einige löschen");
+    return ids;
+  }
+
   const idx = ids.indexOf(id);
   if (idx === -1) {
     ids.push(id);
@@ -168,11 +175,18 @@ function toggleStoredId(key, id) {
   }
 
   try {
-    localStorage.setItem(key, JSON.stringify(ids));
+    const json = JSON.stringify(ids);
+    // SECURITY FIX: Max 50KB pro Key
+    if (json.length > 50000) {
+      showToast("❌ Zu viele Daten – bitte einige löschen");
+      return getStoredIds(key); // Revert change
+    }
+    localStorage.setItem(key, json);
   } catch (e) {
     if (e.name === "QuotaExceededError") {
       console.warn("localStorage quota exceeded – changes not saved");
       showToast("⚠️ Speicher voll – Änderungen können nicht gespeichert werden");
+      return getStoredIds(key); // Revert to saved state
     }
   }
 
@@ -244,13 +258,6 @@ function renderFilterBar() {
   }).join("");
 }
 
-function renderLearnedProgress() {
-  const el = document.getElementById("learned-progress");
-  if (!el) return;
-  const learnedCount = getLearned().length;
-  el.textContent = `${learnedCount} von ${DUAS.length} gelernt`;
-}
-
 function renderStatistics() {
   const today = getTodayStats();
   const duasEl = document.getElementById("total-duas");
@@ -275,7 +282,6 @@ function renderDuas() {
   const count = document.getElementById("dua-count");
 
   count.textContent = `${items.length} ${items.length === 1 ? "Bittgebet" : "Bittgebete"}`;
-  renderLearnedProgress();
 
   if (items.length === 0) {
     list.innerHTML = "";
@@ -325,6 +331,9 @@ function renderDuas() {
   updateExportButton();
   updatePlayAllButton();
 }
+
+// SECURITY: PDF export lock (prevent DoS via parallel exports)
+let pdfExportInProgress = false;
 
 const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Anhören</span>`;
 const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
@@ -645,7 +654,6 @@ function onListClick(e) {
       decrementStat("learned");
     }
     updateButtonUI(btn, isNowLearned, "is-active");
-    renderLearnedProgress();
     renderStatistics();
   } else if (e.target.closest('[data-action="copy"]')) {
     copyDuaToClipboard(dua);
@@ -722,12 +730,20 @@ function checkPDFLibraries() {
 
 // Export Funktion mit jsPDF
 async function exportDuasAsPDF(duas, filename) {
+  // SECURITY FIX: Prevent parallel PDF exports (DoS via CPU/Memory exhaustion)
+  if (pdfExportInProgress) {
+    showToast("⏳ PDF-Export läuft bereits – bitte warten...");
+    return;
+  }
+
   if (duas.length === 0) {
     showToast("❌ Keine Duas zum Exportieren vorhanden.");
     return;
   }
 
   if (!checkPDFLibraries()) return;
+
+  pdfExportInProgress = true;
 
   // Show persistent toast + disable export button during generation
   const persistentToast = showPersistentToast("📄 PDF wird generiert...");
@@ -799,6 +815,8 @@ async function exportDuasAsPDF(duas, filename) {
     document.body.removeChild(container);
     // Re-enable export button
     if (exportBtn) exportBtn.disabled = wasDisabled;
+    // SECURITY FIX: Release PDF export lock
+    pdfExportInProgress = false;
   }
 }
 
