@@ -11,13 +11,14 @@
 
 const DUAS = [
   {
-    id: "q2-128",
-    sura: 2, ayahs: [128],
+    id: "q2-127-128",
+    sura: 2, ayahs: [127, 128],
     category: "persoenlich",
-    arabic: `رَبَّنَا وَاجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِن ذُرِّيَّتِنَا أُمَّةً مُّسْلِمَةً لَّكَ وَأَرِنَا مَنَاسِكَنَا وَتُبْ عَلَيْنَا ۖ إِنَّكَ أَنتَ التَّوَّابُ الرَّحِيمُ`,
-    translit: `Rabbana wa-j'alna muslimayni laka wa min dhurriyyatina ummatan muslimatan laka wa arina manasikana wa tub 'alayna, innaka anta at-tawwabu ar-rahim.`,
-    translation: `Unser Herr, mache uns beide Dir ergeben, und aus unserer Nachkommenschaft eine Dir ergebene Gemeinschaft. Zeige uns unsere Riten und wende Dich uns gnädig zu. Du bist wahrlich der sich gnädig Zuwendende, der Barmherzige.`,
-    note: `Ibrahim & Ismail`
+    audioStart: 6.96,
+    arabic: `رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ ۞ رَبَّنَا وَاجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِن ذُرِّيَّتِنَا أُمَّةً مُّسْلِمَةً لَّكَ وَأَرِنَا مَنَاسِكَنَا وَتُبْ عَلَيْنَا ۖ إِنَّكَ أَنتَ التَّوَّابُ الرَّحِيمُ`,
+    translit: `Rabbana taqabbal minna, innaka anta as-sami'u al-'alim. Rabbana wa-j'alna muslimayni laka wa min dhurriyyatina ummatan muslimatan laka wa arina manasikana wa tub 'alayna, innaka anta at-tawwabu ar-rahim.`,
+    translation: `Unser Herr, nimm dies von uns an. Du bist der Allhörende, der Allwissende. Unser Herr, mache uns beide Dir ergeben, und aus unserer Nachkommenschaft eine Dir ergebene Gemeinschaft. Zeige uns unsere Riten und wende Dich uns gnädig zu. Du bist wahrlich der sich gnädig Zuwendende, der Barmherzige.`,
+    note: `Ibrahim & Ismail, beim Bau der Kaaba`
   },
   {
     id: "q14-35",
@@ -488,16 +489,6 @@ const DUAS = [
     translation: `Führe uns den geraden Weg, den Weg derer, denen Du Gnade erwiesen hast, nicht den Weg derer, die Deinen Zorn erregt haben, und nicht den der Irregehenden.`,
     note: `Al-Fatiha, wird in jedem Pflichtgebet rezitiert`
   },
-  {
-    id: "q2-127",
-    sura: 2, ayahs: [127],
-    category: "vergebung",
-    audioStart: 6.96,
-    arabic: `رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ`,
-    translit: `Rabbana taqabbal minna, innaka anta as-sami'u al-'alim.`,
-    translation: `Unser Herr, nimm dies von uns an. Du bist der Allhörende, der Allwissende.`,
-    note: `Ibrahim & Ismail, beim Bau der Kaaba`
-  }
 ];
 
 const CATEGORIES = [
