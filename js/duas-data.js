@@ -484,8 +484,7 @@ const DUAS = [
     category: "kraft",
     arabic: `رَبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ الْمَصِيرُ ۞ رَبَّنَا لَا تَجْعَلْنَا فِتْنَةً لِّلَّذِينَ كَفَرُوا وَاغْفِرْ لَنَا رَبَّنَا إِنَّكَ أَنتَ الْعَزِيزُ الْحَكِيمُ`,
     translit: `Rabbana 'alayka tawakkalna wa ilayka anabna wa ilayka al-masir. Rabbana la taj'alna fitnatan lilladhina kafaru waghfir lana rabbana innaka anta al-'azeezu al-hakeem.`,
-    translation: `Unser Herr, auf Dich verlassen wir uns, und Dir wenden wir uns reuig zu. Und zu Dir ist der Ausgang. Unser Herr, mache uns nicht zu einer Versuchung für diejenigen, die ungläubig sind. Und vergib uns, unser Herr. Du bist ja der Allmächtige und Allweise.`,
-    note: `Surah Al-Mumtahanah (Bubenheim-Übersetzung)`
+    translation: `Unser Herr, auf Dich verlassen wir uns, und Dir wenden wir uns reuig zu. Und zu Dir ist der Ausgang. Unser Herr, mache uns nicht zu einer Versuchung für diejenigen, die ungläubig sind. Und vergib uns, unser Herr. Du bist ja der Allmächtige und Allweise.`
   },
 ];
 
