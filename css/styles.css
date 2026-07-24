@@ -541,6 +541,42 @@ a {
 
 /* ---------- Footer ---------- */
 
+/* Scroll-to-Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(32, 72, 56, 0.3);
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(32, 72, 56, 0.4);
+}
+
+.scroll-to-top.visible {
+  display: flex;
+  animation: slideInUp 0.3s ease;
+}
+
+.scroll-to-top svg {
+  width: 24px;
+  height: 24px;
+}
+
 .site-footer {
   text-align: center;
   padding: var(--space-3) 0 var(--space-4);

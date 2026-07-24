@@ -671,12 +671,31 @@ function initDarkMode() {
   });
 }
 
+// Scroll-to-Top Button
+function initScrollToTop() {
+  const scrollBtn = document.getElementById("scroll-to-top-btn");
+  if (!scrollBtn) return;
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      scrollBtn.classList.add("visible");
+    } else {
+      scrollBtn.classList.remove("visible");
+    }
+  });
+
+  scrollBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderFilterBar();
   renderDuas();
   renderStatistics();
   updateExportButton();
   initDarkMode();
+  initScrollToTop();
 
   document.getElementById("dua-list").addEventListener("click", onListClick);
   document.getElementById("play-all-btn")?.addEventListener("click", onPlayAllClick);
