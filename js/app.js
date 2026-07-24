@@ -900,6 +900,10 @@ function updateExportButton() {
     exportLabel.textContent = "Meine Duas exportieren";
     exportBtn.title = "Favorisierte Duas exportieren";
     exportBtn.onclick = exportFavoritesAsPDF;
+  } else if (category === "gelernt") {
+    exportLabel.textContent = "Gelerntes exportieren";
+    exportBtn.title = "Auswendig gelernte Duas exportieren";
+    exportBtn.onclick = exportCategoryAsPDF;
   } else if (category === "alle") {
     exportLabel.textContent = "Exportieren";
     exportBtn.title = "Alle Duas exportieren";
