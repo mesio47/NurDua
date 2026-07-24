@@ -5,6 +5,30 @@ const LEARNED_KEY = "nurdua:learned";
 const STATS_KEY = "nurdua:stats";
 const RECITER = "Alafasy_128kbps";
 
+/**
+ * STATISTICS TRACKING MODEL (Persistent)
+ * ========================================
+ * localStorage structure:
+ * {
+ *   "nurdua:stats": {
+ *     "2026-01-15": { listened: 5, learned: 2 },
+ *     "2026-01-16": { listened: 3, learned: 1 },
+ *     ...
+ *   },
+ *   "nurdua:favorites": ["q1-5", "q2-127-128", ...],
+ *   "nurdua:learned": ["q1-5", "q2-127-128", ...]  // Persistent "Auswendig gelernt" list
+ * }
+ *
+ * Labels shown to user:
+ * - "Bereits gehört" = Total from ALL daily stats (sum of all "listened" values)
+ * - "Auswendig gelernt" = Count of IDs in LEARNED_KEY list (persistent, not daily)
+ *
+ * When user clicks heart: Toggles favorite (instant)
+ * When user clicks checkmark:
+ *   - If NOW learned: incrementStat("learned") + add to LEARNED_KEY
+ *   - If UNLEARNING: decrementStat("learned") + remove from LEARNED_KEY
+ */
+
 // Statistik-Tracking
 function getStats() {
   try {
@@ -296,6 +320,7 @@ function stopPlayback() {
 // indefinitely instead (used for the endless "Dauerschleife" mode).
 function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
   const urls = dua.ayahs.map((a) => audioUrlFor(dua.sura, a));
+  preloadNextAudio(dua.id); // Lazy-preload next audio for smooth playback
   let i = 0;
   const isCurrent = () => currentPlayback && currentPlayback.audio === audio;
 
@@ -416,15 +441,63 @@ function shareDua(dua) {
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + "\n" + url)}`;
     const emailUrl = `mailto:?subject=Eine Dua von NurDua&body=${encodeURIComponent(text + "\n\n" + url)}`;
 
-    const menu = `
-      <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:9999;">
-        <p style="margin:0 0 15px;font-weight:600;">Wie möchtest du teilen?</p>
-        <a href="${whatsappUrl}" style="display:block;padding:10px;margin:8px 0;background:#25D366;color:white;text-decoration:none;border-radius:6px;text-align:center;">📱 WhatsApp</a>
-        <a href="${emailUrl}" style="display:block;padding:10px;margin:8px 0;background:#0078D4;color:white;text-decoration:none;border-radius:6px;text-align:center;">📧 Email</a>
-        <button onclick="this.parentElement.parentElement.remove()" style="display:block;width:100%;padding:10px;margin:8px 0;background:#e0e0e0;border:none;border-radius:6px;cursor:pointer;">Abbrechen</button>
-      </div>
+    // Backdrop
+    const backdrop = document.createElement("div");
+    backdrop.style.cssText = `
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      animation: fadeIn 0.2s ease-out;
     `;
-    document.body.insertAdjacentHTML("beforeend", menu);
+
+    // Dialog
+    const dialog = document.createElement("div");
+    dialog.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      max-width: 90%;
+      width: 320px;
+      animation: slideUpDialog 0.3s ease-out;
+    `;
+    dialog.innerHTML = `
+      <p style="margin: 0 0 16px; font-weight: 600; font-size: 16px;">Wie möchtest du teilen?</p>
+      <a href="${whatsappUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #25D366; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;">📱 WhatsApp</a>
+      <a href="${emailUrl}" style="display: block; padding: 12px; margin: 10px 0; background: #0078D4; color: white; text-decoration: none; border-radius: 6px; text-align: center; font-weight: 500;">📧 Email</a>
+      <button style="display: block; width: 100%; padding: 12px; margin: 10px 0; background: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Abbrechen</button>
+    `;
+
+    // Close handler
+    const closeDialog = () => {
+      backdrop.remove();
+      dialog.remove();
+      document.removeEventListener("keydown", handleKeydown);
+    };
+
+    // ESC-key handler
+    const handleKeydown = (e) => {
+      if (e.key === "Escape") closeDialog();
+    };
+
+    // Button click handler
+    const closeBtn = dialog.querySelector("button");
+    closeBtn.addEventListener("click", closeDialog);
+
+    // Backdrop click handler
+    backdrop.addEventListener("click", closeDialog);
+
+    // ESC-key listener
+    document.addEventListener("keydown", handleKeydown);
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(dialog);
   }
 }
 
@@ -501,13 +574,24 @@ function onPlayAllClick() {
 }
 
 // Audio Preloading für schnelleres Abspielen
-function preloadAudio() {
-  DUAS.slice(0, 10).forEach((dua) => {
-    const url = audioUrlFor(dua.sura, dua.ayahs[0]);
-    const audio = new Audio();
-    audio.preload = "metadata";
-    audio.src = url;
-  });
+// Lazy-preload next audio to improve playback smoothness
+function preloadNextAudio(duaId) {
+  const currentIndex = DUAS.findIndex((d) => d.id === duaId);
+  if (currentIndex === -1 || currentIndex >= DUAS.length - 1) return;
+
+  const nextDua = DUAS[currentIndex + 1];
+  const url = audioUrlFor(nextDua.sura, nextDua.ayahs[0]);
+
+  // Create hidden audio element that stays in DOM for preload benefit
+  let preloadElement = document.getElementById(`preload-${nextDua.id}`);
+  if (!preloadElement) {
+    preloadElement = document.createElement("audio");
+    preloadElement.id = `preload-${nextDua.id}`;
+    preloadElement.preload = "metadata";
+    preloadElement.style.display = "none";
+    preloadElement.src = url;
+    document.body.appendChild(preloadElement);
+  }
 }
 
 // Export Funktion mit jsPDF
@@ -703,6 +787,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Audio Preloading starten
-  preloadAudio();
+  // Audio preloading is now lazy (triggered when playing a dua)
 });
