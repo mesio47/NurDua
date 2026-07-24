@@ -122,7 +122,7 @@ const DUAS = [
     id: "q71-28",
     sura: 71, ayahs: [28],
     category: "vergebung",
-    audioEnd: 10.87,
+    audioEnd: 9.87,
     arabic: `رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَن دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ`,
     translit: `Rabbi-ghfir li wa liwalidayya wa liman dakhala baytiya mu'minan wa lil-mu'minina wal-mu'minat.`,
     translation: `Mein Herr, vergib mir, meinen Eltern und jedem, der gläubig mein Haus betritt, und den gläubigen Männern und Frauen.`,
