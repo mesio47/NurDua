@@ -402,6 +402,12 @@ function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
   let i = 0;
   const isCurrent = () => currentPlayback && currentPlayback.audio === audio;
 
+  // BUG FIX: Remove ALL old event listeners to prevent race conditions with multi-ayah duas
+  audio.pause();
+  audio.currentTime = 0;
+  audio.removeEventListener("ended", audio._playNextListener);
+  audio._playNextListener = null;
+
   const playNext = () => {
     if (!isCurrent()) return;
     if (i >= urls.length) {
@@ -455,9 +461,13 @@ function playDuaOn(audio, dua, { loop = false, onDone } = {}) {
     currentPlayback.endedListener = playNext;
   }
 
-  // Entferne alte Event-Listener bevor neue hinzugefügt werden
-  audio.removeEventListener("ended", playNext);
-  audio.addEventListener("ended", playNext);
+  // Register "ended" event listener ONLY ONCE per audio element
+  // Multiple listeners would cause race conditions with multi-ayah duas (e.g., q14-40-41)
+  if (!audio._playNextListener) {
+    audio._playNextListener = playNext;
+    audio.addEventListener("ended", playNext);
+  }
+
   playNext();
 }
 
