@@ -353,7 +353,7 @@ const DUAS = [
     id: "q7-47",
     sura: 7, ayahs: [47],
     category: "schutz",
-    audioStart: 10,
+    audioStart: 13,
     arabic: `رَبَّنَا لَا تَجْعَلْنَا مَعَ الْقَوْمِ الظَّالِمِينَ`,
     translit: `Rabbana la taj'alna ma'a al-qawmi az-zalimin.`,
     translation: `Unser Herr, stelle uns nicht zu den Leuten, die Unrecht tun.`
