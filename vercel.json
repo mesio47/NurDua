@@ -1,4 +1,6 @@
 {
+  "buildCommand": "ls -la",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)\\.html$",
