@@ -58,17 +58,6 @@ const DUAS = [
     note: `Ibrahim, Bitte um einen Sohn`
   },
   {
-    id: "q60-4-5",
-    sura: 60, ayahs: [4, 5],
-    category: "vergebung",
-    audioStart: 51.81,
-    audioEnd: 8.26,
-    arabic: `رَبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ الْمَصِيرُ ۞ رَبَّنَا لَا تَجْعَلْنَا فِتْنَةً لِّلَّذِينَ كَفَرُوا وَاغْفِرْ لَنَا رَبَّنَا`,
-    translit: `Rabbana 'alayka tawakkalna wa ilayka anabna wa ilayka al-masir. Rabbana la taj'alna fitnatan lilladhina kafaru wa-ghfir lana rabbana.`,
-    translation: `Unser Herr, auf Dich vertrauen wir, und Dir wenden wir uns reumütig zu, und zu Dir führt der Lebensweg. Unser Herr, mache uns nicht zu einer Versuchung für die Ungläubigen, und vergib uns, unser Herr.`,
-    note: `Ibrahim & seine Gefolgschaft`
-  },
-  {
     id: "q7-151",
     sura: 7, ayahs: [151],
     category: "vergebung",
