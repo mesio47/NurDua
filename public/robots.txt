@@ -1,0 +1,12 @@
+# NurDua - Robots.txt für Crawler-Kontrolle
+User-agent: *
+Allow: /
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /.obsidian/
+
+# Sitemap
+Sitemap: https://www.nurdua.de/sitemap.xml
+
+# Crawl-delay (respektiere Server)
+Crawl-delay: 1
