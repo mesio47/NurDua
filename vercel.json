@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "",
+  "buildCommand": "echo 'Static site, no build needed'",
   "headers": [
     {
       "source": "/(.*)\\.html$",
