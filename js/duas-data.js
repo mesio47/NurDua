@@ -487,3 +487,4 @@ const CATEGORIES = [
   { id: "favoriten", label: "Meine Duas", suffix: "♥" },
   { id: "gelernt", label: "Gelernt", suffix: "✓" }
 ];
+// Force redeploy - Sa, 25. Jul 2026 16:26:59
