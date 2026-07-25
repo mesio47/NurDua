@@ -102,7 +102,7 @@ const DUAS = [
     arabic: `قَالَ رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي يَفْقَهُوا قَوْلِي وَاجْعَل لِّي وَزِيرًا مِّنْ أَهْلِي هَارُونَ أَخِي اشْدُدْ بِهِ أَزْرِي وَأَشْرِكْهُ فِي أَمْرِي`,
     translit: `Qala rabbi-shrah li sadri wa yassir li amri wa-ahlu 'uqdatan min lisani yafqahu qawli wa-j'al li waziran min ahli Harun akhi ashiddu bihi azri wa ashrikhu fi amri.`,
     translation: `Er sagte: Mein Herr, weite mir meine Brust und erleichtere mir meine Angelegenheit, und löse einen Knoten aus meiner Zunge, damit sie meine Worte verstehen, und mache mir einen Helfer aus meiner Familie, meinen Bruder Aaron. Stärke durch ihn meine Kraft und gib ihm Anteil an meiner Angelegenheit.`,
-    audioEnd: 23.5,
+    audioEnd: 24,
     note: `Musa - Dua auf dem Weg zum Pharao`
   },
   {
