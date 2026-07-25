@@ -675,7 +675,7 @@ function onListClick(e) {
     // Inkrementieren wenn selektiert, dekrementieren wenn deselektiert
     if (isNowLearned) {
       incrementStat("learned");
-      showToast("✨ Mashallah, mach weiter so! ✨");
+      showToast("🤲 Mashallah, mach weiter so! 💚");
     } else {
       decrementStat("learned");
     }
