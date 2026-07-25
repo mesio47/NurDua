@@ -273,7 +273,7 @@ function renderStatistics() {
   if (learnedLabelEl) learnedLabelEl.textContent = "Auswendig gelernt";
 }
 
-function renderDuas() {
+function renderDuas(withFade = false) {
   const favorites = getFavorites();
   const learned = getLearned();
   const items = getFilteredDuas();
@@ -281,17 +281,18 @@ function renderDuas() {
   const emptyState = document.getElementById("empty-state");
   const count = document.getElementById("dua-count");
 
-  count.textContent = `${items.length} ${items.length === 1 ? "Bittgebet" : "Bittgebete"}`;
+  const doRender = () => {
+    count.textContent = `${items.length} ${items.length === 1 ? "Bittgebet" : "Bittgebete"}`;
 
-  if (items.length === 0) {
-    list.innerHTML = "";
-    emptyState.textContent = EMPTY_STATE_MESSAGES[currentCategory()] || EMPTY_STATE_MESSAGES.default;
-    emptyState.hidden = false;
-    return;
-  }
-  emptyState.hidden = true;
+    if (items.length === 0) {
+      list.innerHTML = "";
+      emptyState.textContent = EMPTY_STATE_MESSAGES[currentCategory()] || EMPTY_STATE_MESSAGES.default;
+      emptyState.hidden = false;
+      return;
+    }
+    emptyState.hidden = true;
 
-  list.innerHTML = items.map((dua) => {
+    list.innerHTML = items.map((dua) => {
     const isFav = favorites.includes(dua.id);
     const isLearned = learned.includes(dua.id);
     return `
@@ -325,11 +326,26 @@ function renderDuas() {
           </div>
         </div>
       </article>`;
-  }).join("");
+    }).join("");
 
-  syncButtonsUI();
-  updateExportButton();
-  updatePlayAllButton();
+    syncButtonsUI();
+    updateExportButton();
+    updatePlayAllButton();
+  };
+
+  if (withFade) {
+    list.classList.add("fade-out");
+    setTimeout(() => {
+      doRender();
+      list.classList.remove("fade-out");
+      list.classList.add("fade-in");
+      setTimeout(() => {
+        list.classList.remove("fade-in");
+      }, 350);
+    }, 150);
+  } else {
+    doRender();
+  }
 }
 
 // SECURITY: PDF export lock (prevent DoS via parallel exports)
@@ -927,7 +943,7 @@ function updateExportButton() {
 
 window.addEventListener("hashchange", () => {
   renderFilterBar();
-  renderDuas();
+  renderDuas(true); // withFade = true für smooth Übergänge
   updateExportButton();
   updatePlayAllButton();
 });

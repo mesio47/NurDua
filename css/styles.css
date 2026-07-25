@@ -379,6 +379,16 @@ a {
   flex-direction: column;
   gap: var(--space-3);
   padding-bottom: var(--space-5);
+  transition: opacity 0.25s ease-out;
+}
+
+.dua-list.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dua-list.fade-in {
+  animation: fadeIn 0.35s ease-out;
 }
 
 .dua-card {
@@ -387,14 +397,33 @@ a {
   border-radius: var(--radius-lg);
   padding: var(--space-3);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   animation: slideInUp 0.4s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.dua-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
 }
 
 .dua-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 28px rgba(176, 145, 63, 0.15);
   border-color: var(--color-primary-light);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(176, 145, 63, 0.02) 100%);
+}
+
+.dua-card:hover::before {
+  left: 100%;
 }
 
 .dua-arabic {
@@ -546,8 +575,8 @@ a {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   background: var(--color-primary);
   border: none;
   border-radius: 50%;
@@ -557,19 +586,23 @@ a {
   align-items: center;
   justify-content: center;
   z-index: 999;
-  box-shadow: 0 4px 12px rgba(32, 72, 56, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(176, 145, 63, 0.4);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .scroll-to-top:hover {
   background: var(--color-primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(32, 72, 56, 0.4);
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 12px 28px rgba(176, 145, 63, 0.5);
 }
 
 .scroll-to-top.visible {
   display: flex;
-  animation: slideInUp 0.3s ease;
+  animation: slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-to-top.visible:not(:hover) {
+  animation: pulse-soft 2s ease-in-out infinite;
 }
 
 .scroll-to-top svg {
@@ -665,6 +698,15 @@ a {
   }
   50% {
     opacity: 0.7;
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(176, 145, 63, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(176, 145, 63, 0.6);
   }
 }
 
@@ -803,6 +845,14 @@ body.dark-mode .hero {
 
   .dua-translit {
     font-size: 0.95rem;
+  }
+
+  /* Scroll-to-Top Button - Mobile */
+  .scroll-to-top {
+    width: 50px;
+    height: 50px;
+    bottom: 20px;
+    right: 20px;
   }
 
   /* Icon Buttons - Larger touch targets */
