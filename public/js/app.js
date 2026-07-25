@@ -704,17 +704,11 @@ function onListClick(e) {
     } else {
       decrementStat("learned");
     }
-    // Wenn auf "Gelernt"-Seite: neu rendern um Dua zu entfernen (wie bei Favoriten)
-    if (currentCategory() === "gelernt") {
-      renderDuas();
-      // updateButtonUI wird durch renderDuas schon gesetzt, daher brauchen wir es nicht extra
-    } else {
-      // Bei anderen Kategorien: updateButtonUI mit setTimeout verzögern,
-      // um Race-Condition mit DOM-Updates zu vermeiden
-      setTimeout(() => {
-        updateButtonUI(btn, isNowLearned, "is-active");
-      }, 0);
-    }
+    // Render: Damit die .is-active Klasse sofort korrekt gesetzt wird
+    // Bei "gelernt"-Seite: mit Fade (Dua wird entfernt)
+    // Bei anderen: ohne Fade (nur Button-State update)
+    const withFade = currentCategory() === "gelernt";
+    renderDuas(withFade);
     renderStatistics();
   } else if (e.target.closest('[data-action="copy"]')) {
     copyDuaToClipboard(dua);
