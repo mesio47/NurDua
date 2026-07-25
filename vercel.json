@@ -1,7 +1,6 @@
 {
   "framework": null,
   "buildCommand": "",
-  "outputDirectory": null,
   "headers": [
     {
       "source": "/(.*)\\.html$",
