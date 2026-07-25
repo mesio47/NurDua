@@ -112,29 +112,6 @@ function showToast(message, duration = 2000) {
   }, duration);
 }
 
-// Mobile Tooltip für Learned Button (elegant über dem Button)
-function showLearnedTooltip(btn) {
-  // Entferne existierendes Tooltip
-  const existingTooltip = btn.querySelector(".learned-btn-tooltip");
-  if (existingTooltip) {
-    existingTooltip.remove();
-  }
-
-  // Erstelle neues Tooltip
-  const tooltip = document.createElement("div");
-  tooltip.className = "learned-btn-tooltip";
-  tooltip.textContent = "Auswendig gelernt";
-
-  btn.style.position = "relative"; // Für absolute positioning des Tooltips
-  btn.appendChild(tooltip);
-
-  // Entferne Tooltip nach 2 Sekunden
-  setTimeout(() => {
-    tooltip.style.animation = "tooltipPopup 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse";
-    setTimeout(() => tooltip.remove(), 250);
-  }, 2000);
-}
-
 // Persistent toast (for long operations like PDF export)
 function showPersistentToast(message) {
   const existingToast = document.getElementById("toast-persistent");
@@ -285,11 +262,15 @@ function renderStatistics() {
   const today = getTodayStats();
   const duasEl = document.getElementById("total-duas");
   const listenedEl = document.getElementById("today-listened");
+  const learnedEl = document.getElementById("today-learned");
   const listenedLabelEl = document.getElementById("today-listened-label");
+  const learnedLabelEl = document.getElementById("today-learned-label");
 
   if (duasEl) duasEl.textContent = DUAS.length;
   if (listenedEl) listenedEl.textContent = today.listened || 0;
+  if (learnedEl) learnedEl.textContent = today.learned || 0;
   if (listenedLabelEl) listenedLabelEl.textContent = "Bereits gehört";
+  if (learnedLabelEl) learnedLabelEl.textContent = "Auswendig gelernt";
 }
 
 function renderDuas(withFade = false) {
@@ -332,6 +313,11 @@ function renderDuas(withFade = false) {
             <span>Teilen</span>
           </button>
           <div class="dua-actions-right">
+            <button class="icon-btn learned-btn${isLearned ? " is-active" : ""}" type="button" data-action="learned"
+                    aria-label="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}"
+                    title="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5"/></svg>
+            </button>
             <button class="icon-btn heart-btn${isFav ? " is-active" : ""}" type="button" data-action="favorite"
                     aria-label="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}"
                     title="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}">
@@ -679,6 +665,23 @@ function onListClick(e) {
     updateButtonUI(btn, isFav, "is-active");
     // Wenn auf "Favoriten"-Seite: neu rendern um Dua zu entfernen
     if (currentCategory() === "favoriten") {
+      renderDuas();
+    }
+    renderStatistics();
+  } else if (e.target.closest('[data-action="learned"]')) {
+    const btn = e.target.closest(".learned-btn");
+    const isNowLearned = !getLearned().includes(dua.id);
+    toggleLearned(dua.id);
+    // Inkrementieren wenn selektiert, dekrementieren wenn deselektiert
+    if (isNowLearned) {
+      incrementStat("learned");
+      showToast("🤲 Mashallah, mach weiter so! 💚");
+    } else {
+      decrementStat("learned");
+    }
+    updateButtonUI(btn, isNowLearned, "is-active");
+    // Wenn auf "Gelernt"-Seite: neu rendern um Dua zu entfernen (wie bei Favoriten)
+    if (currentCategory() === "gelernt") {
       renderDuas();
     }
     renderStatistics();
