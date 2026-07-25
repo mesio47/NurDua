@@ -112,6 +112,29 @@ function showToast(message, duration = 2000) {
   }, duration);
 }
 
+// Mobile Tooltip für Learned Button (elegant über dem Button)
+function showLearnedTooltip(btn) {
+  // Entferne existierendes Tooltip
+  const existingTooltip = btn.querySelector(".learned-btn-tooltip");
+  if (existingTooltip) {
+    existingTooltip.remove();
+  }
+
+  // Erstelle neues Tooltip
+  const tooltip = document.createElement("div");
+  tooltip.className = "learned-btn-tooltip";
+  tooltip.textContent = "Auswendig gelernt";
+
+  btn.style.position = "relative"; // Für absolute positioning des Tooltips
+  btn.appendChild(tooltip);
+
+  // Entferne Tooltip nach 2 Sekunden
+  setTimeout(() => {
+    tooltip.style.animation = "tooltipPopup 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse";
+    setTimeout(() => tooltip.remove(), 250);
+  }, 2000);
+}
+
 // Persistent toast (for long operations like PDF export)
 function showPersistentToast(message) {
   const existingToast = document.getElementById("toast-persistent");
@@ -676,6 +699,8 @@ function onListClick(e) {
     if (isNowLearned) {
       incrementStat("learned");
       showToast("🤲 Mashallah, mach weiter so! 💚");
+      // Mobile: Zeige Tooltip
+      showLearnedTooltip(btn);
     } else {
       decrementStat("learned");
     }
