@@ -703,11 +703,9 @@ function onListClick(e) {
     } else {
       decrementStat("learned");
     }
-    // Render: Damit die .is-active Klasse sofort korrekt gesetzt wird
-    // Bei "gelernt"-Seite: mit Fade (Dua wird entfernt)
-    // Bei anderen: ohne Fade (nur Button-State update)
-    const withFade = currentCategory() === "gelernt";
-    renderDuas(withFade);
+    // Render OHNE Fade: Damit die .is-active Markierung sofort sichtbar ist
+    // (Fade-Animation würde die Markierung unsichtbar machen)
+    renderDuas(false);
 
     // Nach renderDuas: Finde den neuen Button und zeige Tooltip
     if (isNowLearned) {
@@ -717,7 +715,7 @@ function onListClick(e) {
           const newBtn = newCard.querySelector(".learned-btn");
           if (newBtn) showLearnedTooltip(newBtn);
         }
-      }, withFade ? 170 : 10); // Warte bis renderDuas fertig ist
+      }, 10);
     }
 
     renderStatistics();
