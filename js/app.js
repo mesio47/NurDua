@@ -693,14 +693,13 @@ function onListClick(e) {
     renderStatistics();
   } else if (e.target.closest('[data-action="learned"]')) {
     const btn = e.target.closest(".learned-btn");
+    const duaId = card.dataset.duaId;
     const isNowLearned = !getLearned().includes(dua.id);
     toggleLearned(dua.id);
     // Inkrementieren wenn selektiert, dekrementieren wenn deselektiert
     if (isNowLearned) {
       incrementStat("learned");
       showToast("🤲 Mashallah, mach weiter so! 💚");
-      // Mobile: Zeige Tooltip
-      showLearnedTooltip(btn);
     } else {
       decrementStat("learned");
     }
@@ -709,6 +708,18 @@ function onListClick(e) {
     // Bei anderen: ohne Fade (nur Button-State update)
     const withFade = currentCategory() === "gelernt";
     renderDuas(withFade);
+
+    // Nach renderDuas: Finde den neuen Button und zeige Tooltip
+    if (isNowLearned) {
+      setTimeout(() => {
+        const newCard = document.querySelector(`[data-dua-id="${duaId}"]`);
+        if (newCard) {
+          const newBtn = newCard.querySelector(".learned-btn");
+          if (newBtn) showLearnedTooltip(newBtn);
+        }
+      }, withFade ? 170 : 10); // Warte bis renderDuas fertig ist
+    }
+
     renderStatistics();
   } else if (e.target.closest('[data-action="copy"]')) {
     copyDuaToClipboard(dua);
