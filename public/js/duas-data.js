@@ -95,8 +95,8 @@ const DUAS = [
     note: `Musa, nach dem goldenen Kalb`
   },
   {
-    id: "q20-25-26",
-    sura: 20, ayahs: [25, 26],
+    id: "q20-25-28",
+    sura: 20, ayahs: [25, 26, 27, 28],
     category: "kraft",
     audioStart: 0.74,
     arabic: `قَالَ رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي يَفْقَهُوا قَوْلِي`,
