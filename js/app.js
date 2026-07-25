@@ -285,15 +285,11 @@ function renderStatistics() {
   const today = getTodayStats();
   const duasEl = document.getElementById("total-duas");
   const listenedEl = document.getElementById("today-listened");
-  const learnedEl = document.getElementById("today-learned");
   const listenedLabelEl = document.getElementById("today-listened-label");
-  const learnedLabelEl = document.getElementById("today-learned-label");
 
   if (duasEl) duasEl.textContent = DUAS.length;
   if (listenedEl) listenedEl.textContent = today.listened || 0;
-  if (learnedEl) learnedEl.textContent = today.learned || 0;
   if (listenedLabelEl) listenedLabelEl.textContent = "Bereits gehört";
-  if (learnedLabelEl) learnedLabelEl.textContent = "Auswendig gelernt";
 }
 
 function renderDuas(withFade = false) {
@@ -336,11 +332,6 @@ function renderDuas(withFade = false) {
             <span>Teilen</span>
           </button>
           <div class="dua-actions-right">
-            <button class="icon-btn learned-btn${isLearned ? " is-active" : ""}" type="button" data-action="learned"
-                    aria-label="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}"
-                    title="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5"/></svg>
-            </button>
             <button class="icon-btn heart-btn${isFav ? " is-active" : ""}" type="button" data-action="favorite"
                     aria-label="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}"
                     title="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}">
@@ -690,34 +681,6 @@ function onListClick(e) {
     if (currentCategory() === "favoriten") {
       renderDuas();
     }
-    renderStatistics();
-  } else if (e.target.closest('[data-action="learned"]')) {
-    const btn = e.target.closest(".learned-btn");
-    const duaId = card.dataset.duaId;
-    const isNowLearned = !getLearned().includes(dua.id);
-    toggleLearned(dua.id);
-    // Inkrementieren wenn selektiert, dekrementieren wenn deselektiert
-    if (isNowLearned) {
-      incrementStat("learned");
-      showToast("🤲 Mashallah, mach weiter so! 💚");
-    } else {
-      decrementStat("learned");
-    }
-    // Render OHNE Fade: Damit die .is-active Markierung sofort sichtbar ist
-    // (Fade-Animation würde die Markierung unsichtbar machen)
-    renderDuas(false);
-
-    // Nach renderDuas: Finde den neuen Button und zeige Tooltip
-    if (isNowLearned) {
-      setTimeout(() => {
-        const newCard = document.querySelector(`[data-dua-id="${duaId}"]`);
-        if (newCard) {
-          const newBtn = newCard.querySelector(".learned-btn");
-          if (newBtn) showLearnedTooltip(newBtn);
-        }
-      }, 10);
-    }
-
     renderStatistics();
   } else if (e.target.closest('[data-action="copy"]')) {
     copyDuaToClipboard(dua);
