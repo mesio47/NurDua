@@ -265,16 +265,6 @@ const DUAS = [
     note: `Jünger 'Isas`
   },
   {
-    id: "q5-114",
-    sura: 5, ayahs: [114],
-    category: "schutz",
-    audioStart: 2.62,
-    arabic: `اللَّهُمَّ رَبَّنَا أَنزِلْ عَلَيْنَا مَائِدَةً مِّنَ السَّمَاءِ تَكُونُ لَنَا عِيدًا لِّأَوَّلِنَا وَآخِرِنَا وَآيَةً مِّنكَ ۖ وَارْزُقْنَا وَأَنتَ خَيْرُ الرَّازِقِينَ`,
-    translit: `Allahumma rabbana anzil 'alayna ma'idatan mina as-sama'i takunu lana 'idan li-awwalina wa akhirina wa ayatan minka wa-rzuqna wa anta khayru ar-raziqin.`,
-    translation: `O Allah, unser Herr, sende auf uns einen Tisch vom Himmel herab, damit er für uns ein Fest sei und ein Zeichen von Dir. Und versorge uns, Du bist der beste Versorger.`,
-    note: `'Isa (Jesus)`
-  },
-  {
     id: "q5-83",
     sura: 5, ayahs: [83],
     category: "vergebung",
