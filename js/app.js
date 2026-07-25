@@ -704,10 +704,16 @@ function onListClick(e) {
     } else {
       decrementStat("learned");
     }
-    updateButtonUI(btn, isNowLearned, "is-active");
     // Wenn auf "Gelernt"-Seite: neu rendern um Dua zu entfernen (wie bei Favoriten)
     if (currentCategory() === "gelernt") {
       renderDuas();
+      // updateButtonUI wird durch renderDuas schon gesetzt, daher brauchen wir es nicht extra
+    } else {
+      // Bei anderen Kategorien: updateButtonUI mit setTimeout verzögern,
+      // um Race-Condition mit DOM-Updates zu vermeiden
+      setTimeout(() => {
+        updateButtonUI(btn, isNowLearned, "is-active");
+      }, 0);
     }
     renderStatistics();
   } else if (e.target.closest('[data-action="copy"]')) {
