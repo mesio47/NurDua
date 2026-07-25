@@ -95,14 +95,15 @@ const DUAS = [
     note: `Musa, nach dem goldenen Kalb`
   },
   {
-    id: "q20-25-26",
-    sura: 20, ayahs: [25, 26],
+    id: "q20-25-28",
+    sura: 20, ayahs: [25, 26, 27, 28],
     category: "kraft",
     audioStart: 0.74,
-    arabic: `رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي`,
-    translit: `Rabbi-shrah li sadri wa yassir li amri.`,
-    translation: `Mein Herr, weite mir meine Brust und erleichtere mir meine Angelegenheit.`,
-    note: `Musa`
+    arabic: `قَالَ رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي يَفْقَهُوا قَوْلِي وَاجْعَل لِّي وَزِيرًا مِّنْ أَهْلِي هَارُونَ أَخِي اشْدُدْ بِهِ أَزْرِي وَأَشْرِكْهُ فِي أَمْرِي`,
+    translit: `Qala rabbi-shrah li sadri wa yassir li amri wa-ahlu 'uqdatan min lisani yafqahu qawli wa-j'al li waziran min ahli Harun akhi ashiddu bihi azri wa ashrikhu fi amri.`,
+    translation: `Er sagte: Mein Herr, weite mir meine Brust und erleichtere mir meine Angelegenheit, und löse einen Knoten aus meiner Zunge, damit sie meine Worte verstehen, und mache mir einen Helfer aus meiner Familie, meinen Bruder Aaron. Stärke durch ihn meine Kraft und gib ihm Anteil an meiner Angelegenheit.`,
+    audioEnd: 23.5,
+    note: `Musa - Dua auf dem Weg zum Pharao`
   },
   {
     id: "q28-16",
