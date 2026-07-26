@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v49";
+const CACHE_NAME = "nurdua-v50";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
@@ -76,6 +76,14 @@ self.addEventListener("fetch", (event) => {
     req.destination === "audio" ||
     req.destination === "video"
   ) {
+    return;
+  }
+
+  // PRÄVENTIV: Cross-origin Requests grundsätzlich NICHT abfangen.
+  // Der SW verwaltet ausschließlich Same-Origin-Assets. Externe Ressourcen
+  // (everyayah.com Audio, CDNs, Fonts, Analytics) gehen so immer nativ durch und
+  // können nicht durch SW-Interception beschädigt werden (Range/CORS/opaque).
+  if (new URL(req.url).origin !== self.location.origin) {
     return;
   }
 
