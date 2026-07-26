@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v46";
+const CACHE_NAME = "nurdua-v47";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
@@ -13,67 +13,102 @@ const URLS_TO_CACHE = [
   "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap",
 ];
 
-// Installation: Cache wichtige Assets
+// Installation: Assets frisch aus dem Netz cachen (cache:"reload" umgeht den
+// HTTP-Cache, damit immutable JS/CSS nicht als alte Version reingezogen wird)
+// und den neuen SW sofort aktivieren (skipWaiting).
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(URLS_TO_CACHE);
-    }).catch(() => {
-      console.log("Cache installation failed");
-    })
+    caches.open(CACHE_NAME).then((cache) =>
+      Promise.all(
+        URLS_TO_CACHE.map((url) =>
+          fetch(new Request(url, { cache: "reload" }))
+            .then((response) => {
+              if (response && (response.ok || response.type === "opaque")) {
+                return cache.put(url, response);
+              }
+            })
+            .catch(() => {
+              /* einzelne Ressource nicht erreichbar -> Install trotzdem fortsetzen */
+            })
+        )
+      )
+    )
   );
 });
 
-// Activation: Cleanup alte Caches
+// Activation: alte Caches löschen und Kontrolle über offene Tabs übernehmen
+// (clients.claim) -> neue Version greift sofort, ohne App-Neustart.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches
+      .keys()
+      .then((cacheNames) =>
+        Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              return caches.delete(cacheName);
+            }
+          })
+        )
+      )
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch: Serve from cache, fallback to network
+// Fetch-Strategie:
+//  - HTML / Seitenaufrufe (navigate): NETWORK-FIRST -> immer aktuell,
+//    Cache nur als Offline-Fallback.
+//  - Statische Assets (JS/CSS/Bilder/Fonts): CACHE-FIRST -> schnell & offline.
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") {
+  const req = event.request;
+  if (req.method !== "GET") {
     return;
   }
 
+  // Network-first für Navigationen (HTML)
+  if (req.mode === "navigate") {
+    event.respondWith(
+      fetch(req)
+        .then((response) => {
+          // frische index.html für Offline-Fall aktualisieren
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("/index.html", copy));
+          return response;
+        })
+        .catch(() =>
+          caches
+            .match(req)
+            .then((cached) => cached || caches.match("/index.html"))
+        )
+    );
+    return;
+  }
+
+  // Cache-first für alles andere
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
+    caches.match(req).then((cached) => {
+      if (cached) {
+        return cached;
       }
 
-      return fetch(event.request).then((response) => {
-        // Only cache successful responses with basic type (Same-Origin)
-        // response.type: "basic" = same-origin, "cors" = cross-origin+CORS
-        // "opaque"/"error" = cannot be cached
-        if (!response || response.status !== 200 || response.type !== "basic") {
+      return fetch(req)
+        .then((response) => {
+          // Nur erfolgreiche Same-Origin-Antworten cachen
+          if (!response || response.status !== 200 || response.type !== "basic") {
+            return response;
+          }
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
           return response;
-        }
-
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-
-        return response;
-      }).catch(() => {
-        return new Response("Offline - Inhalte nicht verfügbar", {
-          status: 503,
-          statusText: "Service Unavailable",
-          headers: new Headers({
-            "Content-Type": "text/plain"
+        })
+        .catch(() =>
+          new Response("Offline - Inhalte nicht verfügbar", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: new Headers({ "Content-Type": "text/plain" }),
           })
-        });
-      });
+        );
     })
   );
 });
