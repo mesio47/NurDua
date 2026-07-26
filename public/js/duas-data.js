@@ -1,4 +1,4 @@
-// NurDua: Datenmodell aller kuratierten Koran-Bittgebete
+// NurDua: Datenmodell aller kuratierten Quran-Bittgebete
 // sura/ayahs werden auch für die Audio-Wiedergabe (everyayah.com) genutzt.
 // audioStart (Sekunden, optional): Startpunkt innerhalb des ersten Verses,
 // falls unser Textausschnitt nicht am Versanfang beginnt (z.B. nach "qala"
@@ -273,7 +273,7 @@ const DUAS = [
     arabic: `رَبَّنَا آمَنَّا فَاكْتُبْنَا مَعَ الشَّاهِدِينَ`,
     translit: `Rabbana amanna fa-ktubna ma'a ash-shahidin.`,
     translation: `Unser Herr, wir glauben. Verzeichne uns unter den Zeugen.`,
-    note: `Leute der Schrift, beim Hören des Korans`
+    note: `Leute der Schrift, beim Hören des Qurans`
   },
   {
     id: "q2-250",

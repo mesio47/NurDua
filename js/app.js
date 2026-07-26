@@ -221,7 +221,7 @@ function sourceLabel(dua) {
   const range = dua.ayahs.length > 1
     ? `${dua.ayahs[0]}–${dua.ayahs[dua.ayahs.length - 1]}`
     : `${dua.ayahs[0]}`;
-  return `Koran ${dua.sura}:${range}`;
+  return `Quran ${dua.sura}:${range}`;
 }
 
 const EMPTY_STATE_MESSAGES = {
@@ -541,7 +541,7 @@ function copyDuaToClipboard(dua) {
 }
 
 function shareDua(dua) {
-  const text = `📖 "${dua.translation}"\n\n${dua.translit}\n\nQuelle: ${sourceLabel(dua)}\n\n✨ Von NurDua – Bittgebete aus dem Koran`;
+  const text = `📖 "${dua.translation}"\n\n${dua.translit}\n\nQuelle: ${sourceLabel(dua)}\n\n✨ Von NurDua – Bittgebete aus dem Quran`;
   const url = "https://www.nurdua.de";
 
   if (navigator.share) {
@@ -791,7 +791,7 @@ async function exportDuasAsPDF(duas, filename) {
     <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #b0913f; margin-bottom: 30px;">
       <p style="color: #b0913f; font-size: 14px; font-weight: bold; margin: 0;">www.nurdua.de</p>
     </div>
-    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 10px 0;">NurDua – Bittgebete aus dem Koran</h1>
+    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 10px 0;">NurDua – Bittgebete aus dem Quran</h1>
     <p style="text-align: center; color: #999; font-size: 12px; margin-bottom: 30px;">Exportiert am ${new Date().toLocaleDateString("de-DE")}</p>
     ${duas.map((dua) => `
       <div style="margin: 25px 0; padding: 15px; border-left: 4px solid #b0913f;">
