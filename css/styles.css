@@ -266,9 +266,9 @@ a {
 }
 
 .filter-pill.is-active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: #1c2620;
 }
 
 .dua-count-row {
