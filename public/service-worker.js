@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v48";
+const CACHE_NAME = "nurdua-v49";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
@@ -63,6 +63,19 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") {
+    return;
+  }
+
+  // WICHTIG: Media- und Range-Requests NICHT abfangen!
+  // Audio (everyayah.com) wird per HTTP-Range-Request geladen. Wenn der SW das
+  // abfängt und mit fetch(req) antwortet, geht die native 206-Partial-Content-
+  // Behandlung verloren -> iOS Safari verweigert die Wiedergabe komplett, Chrome
+  // bricht oft ab. Darum: Browser die Range-Requests selbst nativ handhaben lassen.
+  if (
+    req.headers.has("range") ||
+    req.destination === "audio" ||
+    req.destination === "video"
+  ) {
     return;
   }
 
