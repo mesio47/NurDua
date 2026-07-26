@@ -355,8 +355,8 @@ const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14
 const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
 const LOOP_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2 21 6 17 10"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22 3 18 7 14"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Dauerschleife</span>`;
 const LOOP_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
-const PLAY_ALL_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Alle Bittgebete anhören</span>`;
-const PLAY_ALL_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Wiedergabe stoppen</span>`;
+const PLAY_ALL_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="play-all-btn-label">Alle Bittgebete anhören</span>`;
+const PLAY_ALL_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span id="play-all-btn-label">Wiedergabe stoppen</span>`;
 
 let currentPlayback = null; // { mode: "single" | "loop" | "queue", duaId, audio, queue?, queueIndex? }
 
@@ -404,7 +404,10 @@ function stopPlayback() {
   }
 
   const playAllBtn = document.getElementById("play-all-btn");
-  if (playAllBtn) setBtnVisual(playAllBtn, false, PLAY_ALL_ICON, PLAY_ALL_STOP_ICON);
+  if (playAllBtn) {
+    setBtnVisual(playAllBtn, false, PLAY_ALL_ICON, PLAY_ALL_STOP_ICON);
+    updatePlayAllButton(); // dynamisches Label (z.B. "Meine Duas abspielen") wiederherstellen
+  }
 
   currentPlayback = null;
 }
