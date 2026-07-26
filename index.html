@@ -72,35 +72,8 @@
   }
   </script>
 
-  <!-- Google Analytics 4 (DSGVO-konform mit Cookie-Consent) -->
-  <script>
-    // Initialize Google Analytics only if user consents
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'analytics_storage': 'denied'
-    });
-
-    // Check if user already gave consent
-    const analyticsConsent = localStorage.getItem('nurdua:analytics-consent');
-    if (analyticsConsent === 'accepted') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'granted'
-      });
-      // Load GA4 script
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-8QE8RLXZHQ';
-      document.head.appendChild(script);
-
-      gtag('js', new Date());
-      gtag('config', 'G-8QE8RLXZHQ', {
-        'anonymize_ip': true,
-        'allow_google_signals': false
-      });
-    }
-  </script>
+  <!-- Google Analytics 4 + Cookie-Consent (DSGVO-konform, extern wegen strikter CSP) -->
+  <script src="js/consent.js"></script>
 </head>
 <body>
 
@@ -199,34 +172,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 
-  <!-- DSGVO Cookie-Consent Logic -->
-  <script>
-    // Show cookie banner if no decision made yet
-    if (!localStorage.getItem('nurdua:analytics-consent')) {
-      document.getElementById('cookie-consent-banner').style.display = 'flex';
-    }
-
-    // Accept analytics
-    document.getElementById('cookie-accept-btn').addEventListener('click', () => {
-      localStorage.setItem('nurdua:analytics-consent', 'accepted');
-      document.getElementById('cookie-consent-banner').style.display = 'none';
-
-      // Update consent and load GA4
-      gtag('consent', 'update', { 'analytics_storage': 'granted' });
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-8QE8RLXZHQ';
-      document.head.appendChild(script);
-      gtag('js', new Date());
-      gtag('config', 'G-8QE8RLXZHQ', { 'anonymize_ip': true, 'allow_google_signals': false });
-    });
-
-    // Reject analytics
-    document.getElementById('cookie-reject-btn').addEventListener('click', () => {
-      localStorage.setItem('nurdua:analytics-consent', 'rejected');
-      document.getElementById('cookie-consent-banner').style.display = 'none';
-    });
-  </script>
+  <!-- Cookie-Consent-Logik: siehe js/consent.js (im <head> geladen) -->
 
   <script src="js/duas-data.js"></script>
   <script src="js/app.js"></script>

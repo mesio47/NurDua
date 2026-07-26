@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v45";
+const CACHE_NAME = "nurdua-v46";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
@@ -7,6 +7,7 @@ const URLS_TO_CACHE = [
   "/datenschutz.html",
   "/css/styles.css",
   "/js/app.js",
+  "/js/consent.js",
   "/js/duas-data.js",
   "/assets/logo-full.png",
   "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap",
