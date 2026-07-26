@@ -485,7 +485,7 @@ const CATEGORIES = [
   { id: "vergebung", label: "Vergebung" },
   { id: "kraft", label: "Kraft" },
   { id: "schutz", label: "Schutz & Segen" },
-  { id: "favoriten", label: "Meine Duas", suffix: "♥" },
-  { id: "gelernt", label: "Gelernt", suffix: "✓" }
+  { id: "gelernt", label: "Gelernt", suffix: "✓" },
+  { id: "favoriten", label: "Meine Duas", suffix: "♥" }
 ];
 // Force redeploy - Sa, 25. Jul 2026 16:26:59
