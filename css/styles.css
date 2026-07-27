@@ -39,6 +39,11 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body.dark-mode {
+  color-scheme: dark;
 }
 
 body {
@@ -52,6 +57,39 @@ body {
 
 a {
   color: inherit;
+}
+
+/* ---------- Skip Link (Tastatur / Screenreader) ---------- */
+
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 1000;
+  background: var(--color-secondary);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* ---------- Sichtbare Fokus-Zustände (Tastaturbedienung) ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+body.dark-mode :focus-visible {
+  outline-color: var(--color-primary-light);
 }
 
 .container {
@@ -197,6 +235,7 @@ a {
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
@@ -256,6 +295,8 @@ a {
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   flex-shrink: 0;
 }
@@ -299,7 +340,9 @@ a {
   font-weight: 500;
   font-family: var(--font-body);
   cursor: pointer;
-  transition: all 0.15s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .action-btn svg {
@@ -339,6 +382,8 @@ a {
   font-weight: 500;
   font-family: var(--font-body);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -397,7 +442,7 @@ a {
   border-radius: var(--radius-lg);
   padding: var(--space-3);
   box-shadow: var(--shadow-sm);
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.35s ease, background 0.35s ease;
   animation: slideInUp 0.4s ease-out;
   position: relative;
   overflow: hidden;
@@ -480,6 +525,8 @@ a {
   color: var(--color-text-muted);
   font-size: 0.85rem;
   font-family: var(--font-body);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, color 0.15s ease;
   white-space: nowrap;
   flex-shrink: 0;
@@ -587,7 +634,9 @@ a {
   justify-content: center;
   z-index: 999;
   box-shadow: 0 6px 20px rgba(176, 145, 63, 0.4);
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.35s ease, transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
 }
 
 .scroll-to-top:hover {
@@ -980,5 +1029,23 @@ body.dark-mode .hero {
 
   .site-footer a:hover {
     color: var(--color-gold);
+  }
+}
+
+/* ---------- Reduced Motion (Barrierefreiheit) ---------- */
+/* Respektiert die System-Einstellung "Bewegung reduzieren": schaltet
+   Animationen, Übergänge und Smooth-Scroll ab, ohne Funktionalität zu ändern. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -87,6 +87,9 @@ function showToast(message, duration = 2000) {
 
   const toast = document.createElement("div");
   toast.id = "toast-notification";
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.setAttribute("aria-atomic", "true");
   toast.textContent = message;
   toast.style.cssText = `
     position: fixed;
@@ -121,6 +124,9 @@ function showPersistentToast(message) {
 
   const toast = document.createElement("div");
   toast.id = "toast-persistent";
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.setAttribute("aria-atomic", "true");
   toast.textContent = message;
   toast.style.cssText = `
     position: fixed;
@@ -305,23 +311,23 @@ function renderDuas(withFade = false) {
           <button class="icon-btn play-btn" type="button" data-action="play" aria-label="Rezitation abspielen">${PLAY_ICON}</button>
           <button class="icon-btn loop-btn" type="button" data-action="loop" aria-label="In Dauerschleife (unendlich) abspielen" title="In Dauerschleife (unendlich) abspielen">${LOOP_ICON}</button>
           <button class="icon-btn copy-btn" type="button" data-action="copy" aria-label="Text kopieren" title="Dua-Text kopieren">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/></svg>
             <span>Kopieren</span>
           </button>
           <button class="icon-btn share-btn" type="button" data-action="share" aria-label="Teilen" title="Dua teilen">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             <span>Teilen</span>
           </button>
           <div class="dua-actions-right">
             <button class="icon-btn learned-btn${isLearned ? " is-active" : ""}" type="button" data-action="learned"
                     aria-label="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}"
                     title="${isLearned ? "Bereits auswendig gelernt" : "Als auswendig gelernt markieren"}">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5"/></svg>
             </button>
             <button class="icon-btn heart-btn${isFav ? " is-active" : ""}" type="button" data-action="favorite"
                     aria-label="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}"
                     title="${isFav ? "Gespeichert – aus meinen Duas entfernen" : "In meinen Duas speichern"}">
-              <svg viewBox="0 0 24 24" fill="${isFav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.9.8 6 3 2.1-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7-2.5 4.7-10 9.3-10 9.3Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="${isFav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.5 8.1 2.3 4.5 6 4c2.1-.3 3.9.8 6 3 2.1-2.2 3.9-3.3 6-3 3.7.5 5.5 4.1 4 7.7-2.5 4.7-10 9.3-10 9.3Z"/></svg>
             </button>
           </div>
         </div>
@@ -351,12 +357,12 @@ function renderDuas(withFade = false) {
 // SECURITY: PDF export lock (prevent DoS via parallel exports)
 let pdfExportInProgress = false;
 
-const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Anhören</span>`;
-const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
-const LOOP_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2 21 6 17 10"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22 3 18 7 14"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Dauerschleife</span>`;
-const LOOP_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
-const PLAY_ALL_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="play-all-btn-label">Alle Bittgebete anhören</span>`;
-const PLAY_ALL_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span id="play-all-btn-label">Wiedergabe stoppen</span>`;
+const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Anhören</span>`;
+const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
+const LOOP_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2 21 6 17 10"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22 3 18 7 14"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Dauerschleife</span>`;
+const LOOP_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span>Stoppen</span>`;
+const PLAY_ALL_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span id="play-all-btn-label">Alle Bittgebete anhören</span>`;
+const PLAY_ALL_STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span id="play-all-btn-label">Wiedergabe stoppen</span>`;
 
 let currentPlayback = null; // { mode: "single" | "loop" | "queue", duaId, audio, queue?, queueIndex? }
 
@@ -583,6 +589,7 @@ function shareDua(dua) {
       width: min(90vw, 320px);
       max-height: 90vh;
       overflow-y: auto;
+      overscroll-behavior: contain;
       animation: slideUpDialog 0.3s ease-out;
     `;
     dialog.innerHTML = `

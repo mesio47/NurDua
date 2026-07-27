@@ -2,11 +2,10 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>NurDua – Bittgebete aus dem Quran</title>
   <meta name="description" content="49 Bittgebete (Duas) aus dem Quran mit Übersetzung, arabischem Text und Quran-Rezitation zum Anhören. Kostenlos und offline verfügbar." />
   <meta name="theme-color" content="#204838" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="expires" content="0" />
@@ -77,11 +76,13 @@
 </head>
 <body>
 
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
+
   <header class="site-header">
     <div class="container">
       <div class="header-inner">
         <a class="brand" href="index.html">
-          <img class="brand-logo" src="assets/logo-full.png" alt="NurDua.de – Bittgebete aus dem Qur'an" />
+          <img class="brand-logo" src="assets/logo-full.png" width="500" height="500" alt="NurDua.de – Bittgebete aus dem Qur'an" />
         </a>
         <button class="theme-toggle" id="theme-toggle" title="Dark Mode umschalten" aria-label="Dark Mode">🌙</button>
       </div>
@@ -91,7 +92,7 @@
   <section class="hero">
     <div class="container">
       <h1 class="hero-title">
-        "Ruft Mich an, so erhöre Ich euch"
+        „Ruft Mich an, so erhöre Ich euch"
         <br />
         <small>(40:60)</small>
       </h1>
@@ -119,18 +120,18 @@
     </div>
   </nav>
 
-  <main class="container">
+  <main class="container" id="main-content">
     <div class="dua-count-row">
       <div>
         <p class="dua-count" id="dua-count"></p>
       </div>
       <div class="action-buttons">
         <button class="play-all-btn" type="button" id="play-all-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
           <span id="play-all-btn-label">Alle Bittgebete anhören</span>
         </button>
         <button class="action-btn export-btn" type="button" id="export-btn" title="Exportieren">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span id="export-btn-label">Exportieren</span>
         </button>
       </div>
@@ -140,7 +141,7 @@
   </main>
 
   <button class="scroll-to-top" id="scroll-to-top-btn" title="Nach oben scrollen" aria-label="Nach oben scrollen">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 14l5-5 5 5z"/></svg>
   </button>
 
   <footer class="site-footer">
@@ -157,7 +158,7 @@
   </footer>
 
   <!-- DSGVO Cookie-Consent Banner -->
-  <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e0e0e0; padding: 16px 20px; z-index: 9999; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); font-size: 14px; line-height: 1.5;">
+  <div id="cookie-consent-banner" role="region" aria-label="Cookie-Hinweis" aria-live="polite" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e0e0e0; padding: 16px 20px; z-index: 9999; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); font-size: 14px; line-height: 1.5;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
       <p style="margin: 0; flex: 1; min-width: 250px; color: #333;">
         🍪 Wir nutzen Analytics, um die Website zu verbessern. Deine Daten werden anonymisiert.
