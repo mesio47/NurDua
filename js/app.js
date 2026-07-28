@@ -769,7 +769,7 @@ function checkPDFLibraries() {
 }
 
 // Export Funktion mit jsPDF
-async function exportDuasAsPDF(duas, filename) {
+async function exportDuasAsPDF(duas, filename, title = "NurDua – Bittgebete aus dem Quran") {
   // SECURITY FIX: Prevent parallel PDF exports (DoS via CPU/Memory exhaustion)
   if (pdfExportInProgress) {
     showToast("⏳ PDF-Export läuft bereits – bitte warten...");
@@ -798,7 +798,7 @@ async function exportDuasAsPDF(duas, filename) {
     <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #b0913f; margin-bottom: 30px;">
       <p style="color: #b0913f; font-size: 14px; font-weight: bold; margin: 0;">www.nurdua.de</p>
     </div>
-    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 30px 0;">NurDua – Bittgebete aus dem Quran</h1>
+    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 30px 0;">${title}</h1>
     ${duas.map((dua) => `
       <div class="pdf-dua" style="margin: 25px 0; padding: 15px; border-left: 4px solid #b0913f; break-inside: avoid;">
         <div style="font-size: 16px; direction: rtl; font-weight: bold; margin-bottom: 10px; font-family: 'Amiri', serif;">${dua.arabic}</div>
@@ -906,16 +906,17 @@ function exportFavoritesAsPDF() {
 
   const filename = `nurdua-meine-duas-${new Date().toISOString().split("T")[0]}.pdf`;
   showToast(`📄 Exportiere ${favDuas.length} Favoriten...`);
-  exportDuasAsPDF(favDuas, filename);
+  exportDuasAsPDF(favDuas, filename, "Meine Duas");
 }
 
 // Kategorie exportieren
 function exportCategoryAsPDF() {
   const category = currentCategory();
   const categoryDuas = getFilteredDuas();
-  const categoryLabel = CATEGORIES.find(c => c.id === category)?.label || "Duas";
   const filename = `nurdua-${category}-${new Date().toISOString().split("T")[0]}.pdf`;
-  exportDuasAsPDF(categoryDuas, filename);
+  // "Gelerntes" bekommt einen eigenen PDF-Titel, sonst der Standardtitel
+  const title = category === "gelernt" ? "Gelerntes" : undefined;
+  exportDuasAsPDF(categoryDuas, filename, title);
 }
 
 // Alle Duas exportieren
