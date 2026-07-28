@@ -798,10 +798,9 @@ async function exportDuasAsPDF(duas, filename) {
     <div style="text-align: center; padding: 15px 0; border-bottom: 2px solid #b0913f; margin-bottom: 30px;">
       <p style="color: #b0913f; font-size: 14px; font-weight: bold; margin: 0;">www.nurdua.de</p>
     </div>
-    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 10px 0;">NurDua – Bittgebete aus dem Quran</h1>
-    <p style="text-align: center; color: #999; font-size: 12px; margin-bottom: 30px;">Exportiert am ${new Date().toLocaleDateString("de-DE")}</p>
+    <h1 style="text-align: center; color: #204838; font-size: 28px; margin: 0 0 30px 0;">NurDua – Bittgebete aus dem Quran</h1>
     ${duas.map((dua) => `
-      <div style="margin: 25px 0; padding: 15px; border-left: 4px solid #b0913f;">
+      <div class="pdf-dua" style="margin: 25px 0; padding: 15px; border-left: 4px solid #b0913f; break-inside: avoid;">
         <div style="font-size: 16px; direction: rtl; font-weight: bold; margin-bottom: 10px; font-family: 'Amiri', serif;">${dua.arabic}</div>
         <div style="font-style: italic; color: #8a7130; font-size: 12px; margin-bottom: 8px;">${dua.translit}</div>
         <div style="font-size: 13px; color: #333; margin-bottom: 8px;">${dua.translation}</div>
@@ -820,29 +819,64 @@ async function exportDuasAsPDF(duas, filename) {
       backgroundColor: "#ffffff"
     });
 
-    const imgData = canvas.toDataURL("image/png");
-    const imgWidth = 210; // A4 width in mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({
-      orientation: imgHeight > imgWidth ? "p" : "p",
-      unit: "mm",
-      format: "a4"
-    });
+    const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
 
-    let heightLeft = imgHeight;
-    let position = 0;
+    const PAGE_W = 210;          // A4-Breite in mm
+    const PAGE_H = 297;          // A4-Höhe in mm
+    const BOTTOM_RESERVE = 12;   // mm unten freihalten (Fußzeile + sauberer Rand)
+    const usableH = PAGE_H - BOTTOM_RESERVE;
 
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= 297; // A4 height in mm
+    const pxPerMM = canvas.width / PAGE_W;      // Bild nutzt volle A4-Breite
+    const pageSlicePx = usableH * pxPerMM;      // max. Slice-Höhe pro Seite (Canvas-Pixel)
 
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= 297;
+    // Umbruchpunkte = Oberkante jeder Dua (relativ zum Container), in Canvas-Pixel.
+    // So wird NUR zwischen Bittgebeten umgebrochen, nie mitten in einem.
+    const containerRect = container.getBoundingClientRect();
+    const scaleFactor = canvas.height / containerRect.height;
+    const breakpoints = Array.from(container.querySelectorAll(".pdf-dua"))
+      .map((el) => (el.getBoundingClientRect().top - containerRect.top) * scaleFactor);
+    breakpoints.push(canvas.height); // Ende des Inhalts
+
+    let currentTop = 0;
+    let pageIndex = 0;
+
+    while (currentTop < canvas.height - 1) {
+      const maxBottom = currentTop + pageSlicePx;
+
+      // Größter Dua-Umbruchpunkt, der noch auf diese Seite passt
+      let cut = breakpoints.filter((bp) => bp > currentTop + 1 && bp <= maxBottom).pop();
+
+      // Fallback: einzelner Block höher als eine Seite → harter Schnitt
+      if (cut === undefined) cut = Math.min(maxBottom, canvas.height);
+
+      const sliceHeightPx = cut - currentTop;
+
+      // Teil-Canvas für diese Seite ausschneiden
+      const pageCanvas = document.createElement("canvas");
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = sliceHeightPx;
+      const ctx = pageCanvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+      ctx.drawImage(canvas, 0, currentTop, canvas.width, sliceHeightPx, 0, 0, canvas.width, sliceHeightPx);
+
+      if (pageIndex > 0) pdf.addPage();
+      pdf.addImage(pageCanvas.toDataURL("image/png"), "PNG", 0, 0, PAGE_W, sliceHeightPx / pxPerMM);
+
+      currentTop = cut;
+      pageIndex++;
     }
+
+    // Fußzeile: Exportdatum unten auf der letzten Seite (statt oben)
+    pdf.setFontSize(9);
+    pdf.setTextColor(150, 150, 150);
+    pdf.text(
+      `Exportiert am ${new Date().toLocaleDateString("de-DE")}`,
+      PAGE_W / 2,
+      PAGE_H - 6,
+      { align: "center" }
+    );
 
     pdf.save(filename.replace(".html", ".pdf"));
     removePersistentToast(persistentToast);
