@@ -914,8 +914,8 @@ function exportCategoryAsPDF() {
   const category = currentCategory();
   const categoryDuas = getFilteredDuas();
   const filename = `nurdua-${category}-${new Date().toISOString().split("T")[0]}.pdf`;
-  // "Gelerntes" bekommt einen eigenen PDF-Titel, sonst der Standardtitel
-  const title = category === "gelernt" ? "Gelerntes" : undefined;
+  // "Gelernt" bekommt einen eigenen PDF-Titel, sonst der Standardtitel
+  const title = category === "gelernt" ? "Gelernte Duas" : undefined;
   exportDuasAsPDF(categoryDuas, filename, title);
 }
 

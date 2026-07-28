@@ -1,5 +1,5 @@
 // NurDua Service Worker für PWA & Offline-Support
-const CACHE_NAME = "nurdua-v57";
+const CACHE_NAME = "nurdua-v58";
 const URLS_TO_CACHE = [
   "/",
   "/index.html",
