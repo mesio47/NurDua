@@ -964,6 +964,10 @@ body.dark-mode .hero {
 }
 
 /* Disable Hover Effects on Touch Devices */
+/* :not(.is-active) => aktive Buttons (z.B. "Gelernt"-Haken, Favorit) behalten
+   ihre grüne/aktive Markierung, auch wenn der :hover-Zustand nach dem Tippen
+   auf Touch-Geräten "kleben" bleibt. Sonst würde color/background: inherit die
+   Aktiv-Farbe überschreiben und erst nach Reload/Kategoriewechsel sichtbar. */
 @media (hover: none) {
   .theme-toggle:hover,
   .back-link:hover,
@@ -975,8 +979,8 @@ body.dark-mode .hero {
   .loop-btn:hover,
   .copy-btn:hover,
   .share-btn:hover,
-  .learned-btn:hover,
-  .heart-btn:hover,
+  .learned-btn:not(.is-active):hover,
+  .heart-btn:not(.is-active):hover,
   .scroll-to-top:hover,
   .site-footer a:hover {
     background-color: inherit;
