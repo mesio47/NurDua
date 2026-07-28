@@ -42,8 +42,12 @@
   }
 
   // --- Cookie-Consent-Banner ---
+  // Eine Entscheidung gilt für die GESAMTE Seite (localStorage ist pro Domain,
+  // nicht pro Unterseite) – kein erneutes Abfragen auf jeder einzelnen Seite.
+  var banner = null;
+
   function initBanner() {
-    var banner = document.getElementById("cookie-consent-banner");
+    banner = document.getElementById("cookie-consent-banner");
     if (!banner) return;
 
     // Banner nur zeigen, wenn noch keine Entscheidung getroffen wurde.
@@ -66,13 +70,32 @@
       rejectBtn.addEventListener("click", function () {
         localStorage.setItem(CONSENT_KEY, "rejected");
         banner.style.display = "none";
+        // Widerruf muss so einfach wirken wie die Zustimmung (Art. 7 Abs. 3 DSGVO):
+        // auch wenn GA vorher schon geladen wurde, Consent-Signal aktualisieren.
+        gtag("consent", "update", { analytics_storage: "denied" });
       });
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initBanner);
-  } else {
+  // Erlaubt es, die Entscheidung später zu ändern (Link "Cookie-Einstellungen"
+  // im Footer aller Seiten) – öffnet denselben Banner erneut.
+  function initSettingsLink() {
+    var link = document.getElementById("cookie-settings-link");
+    if (!link) return;
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (banner) banner.style.display = "flex";
+    });
+  }
+
+  function init() {
     initBanner();
+    initSettingsLink();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
 })();

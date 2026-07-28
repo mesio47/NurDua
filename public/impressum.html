@@ -14,17 +14,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8QE8RLXZHQ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-8QE8RLXZHQ', {
-      'anonymize_ip': true,
-      'allow_google_signals': false
-    });
-  </script>
+  <!-- Google Analytics 4 + Cookie-Consent (DSGVO-konform): lädt GA4 NUR nach
+       Einwilligung, respektiert die auf jeder Seite gleiche Entscheidung
+       (localStorage gilt pro Domain) -->
+  <script src="js/consent.js"></script>
 </head>
 <body>
 
@@ -67,9 +60,23 @@
         <a href="impressum.html">Impressum</a>
         <span class="footer-sep">·</span>
         <a href="datenschutz.html">Datenschutz</a>
+        <span class="footer-sep">·</span>
+        <a href="#" id="cookie-settings-link">Cookie-Einstellungen</a>
       </p>
     </div>
   </footer>
+
+  <!-- DSGVO Cookie-Consent Banner -->
+  <div id="cookie-consent-banner" role="region" aria-label="Cookie-Hinweis" aria-live="polite" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e0e0e0; padding: 16px 20px; z-index: 9999; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); font-size: 14px; line-height: 1.5;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+      <p style="margin: 0; flex: 1; min-width: 250px; color: #333;">
+        🍪 Wir nutzen Analytics, um die Website zu verbessern. Deine Daten werden anonymisiert.
+        <a href="/datenschutz.html" style="color: #204838; text-decoration: underline;">Datenschutz</a>
+      </p>
+      <button id="cookie-accept-btn" style="padding: 10px 20px; background: #204838; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; white-space: nowrap;">Akzeptieren</button>
+      <button id="cookie-reject-btn" style="padding: 10px 20px; background: #f0f0f0; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; white-space: nowrap;">Ablehnen</button>
+    </div>
+  </div>
 
 </body>
 </html>
